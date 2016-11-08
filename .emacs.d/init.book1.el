@@ -541,6 +541,11 @@
 ;;; P218 Git
 ;;
 ;;(package-install 'egg)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (executable-find "git")
   (require 'egg nil t))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; usage
+;;   C-x v s (egg-staus)
+;;   C-x v l (egg-log)
+
