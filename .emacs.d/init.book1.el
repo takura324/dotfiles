@@ -110,22 +110,25 @@
           ("-cdac$" . 1.3))))
 
 
-(when (eq system-type 'cygwinフォントをConsolasに
-  ;; (set-face-attribute 'default nil
-  ;;                     :family "Consolas"
-  ;;                     :height 120)
+(when (eq system-type 'cygwin)
+  ;; フォントをConsolasに
+  (set-face-attribute 'default nil
+                      :family "Consolas"
+                      :height 108)
 
   ;; 日本語フォントをメイリオに
   (set-fontset-font
    nil
    'japanese-jisx0208
+   (font-spec :family "MeiryoKe_Console"))
 ;;   (font-spec :family "メイリオ"))
-   (font-spec :family "MS Gothic"))
+;;   (font-spec :family "MS Gothic"))
   ;; フォントの横幅を調節する
   (setq face-font-rescale-alist
         '((".*Consolas.*" . 1.0)
           (".*メイリオ.*" . 1.15)
           (".*MS Gothic*" . 1.15)
+          (".*MeiryoKe_Console*" . 1.08)
           ("-cdac$" . 1.3))))
 
 ;; | 数字 | アルファベット | 日本語     |
@@ -162,16 +165,16 @@
 ;; emacs -batch -f batch-byte-compile <file-path>
 ;; /Applications/Emacs.app/Contents/MacOS/Emacs ...
 
-;; auto-installの設定
-(when (require 'auto-install nil t)     ; ←1●
-  ;; 2●インストールディレクトリを設定する 初期値は ~/.emacs.d/auto-install/
-  (setq auto-install-directory "~/.emacs.d/site-lisp/")
-  ;; EmacsWikiに登録されているelisp の名前を取得する
-  (auto-install-update-emacswiki-package-name t)
-  ;; 必要であればプロキシの設定を行う
-  ;; (setq url-proxy-services '(("http" . "localhost:8339")))
-  ;; 3●install-elisp の関数を利用可能にする
-  (auto-install-compatibility-setup)) ; 4●
+;; ;; auto-installの設定
+;; (when (require 'auto-install nil t)     ; ←1●
+;;   ;; 2●インストールディレクトリを設定する 初期値は ~/.emacs.d/auto-install/
+;;   (setq auto-install-directory "~/.emacs.d/site-lisp/")
+;;   ;; EmacsWikiに登録されているelisp の名前を取得する
+;;   (auto-install-update-emacswiki-package-name t)
+;;   ;; 必要であればプロキシの設定を行う
+;;   ;; (setq url-proxy-services '(("http" . "localhost:8339")))
+;;   ;; 3●install-elisp の関数を利用可能にする
+;;   (auto-install-compatibility-setup)) ; 4●
 
 
 ;; (install-elisp "http://www.emacswiki.org/emacs/download/redo+.el")
