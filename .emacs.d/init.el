@@ -70,7 +70,8 @@
 (setq w32-ime-mode-line-state-indicator-list '("[Aa]" "[あ]" "[Aa]"))
 
 ;; IME初期化
-(w32-ime-initialize)
+(when (eq system-type 'cygwin)
+  (w32-ime-initialize))
 
 ;; デフォルトIME
 (setq default-input-method "W32-IME")

@@ -1,3 +1,6 @@
+;; package-install
+;;   (list-packages)
+
 ;;;
 ;;;wEmacs À‘H“ü–åx
 ;;;
@@ -159,7 +162,7 @@
 ;;; auto-install (pp.110)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (package-install 'auto-install)
+;;(package-install 'auto-install)
 
 ;; byte-compile
 ;; emacs -batch -f batch-byte-compile <file-path>
@@ -532,3 +535,12 @@
 ;; (set-face-background 'whitespace-space "DarkSlateGray")
 ;; (set-face-foreground 'whitespace-tab "LightSlateGray")
 ;; (set-face-background 'whitespace-tab "DarkSlateGray")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; P218 Git
+;;
+;;(package-install 'egg)
+(when (executable-find "git")
+  (require 'egg nil t))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

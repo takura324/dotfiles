@@ -1,26 +1,26 @@
 ;;(require 'un-define)
 ;;(require 'jisx0213)
 
-;;15.1 “ú–{Œê‚Ì•ÒW (2004/01/15)
+;;15.1 æ—¥æœ¬èªã®ç·¨é›† (2004/01/15)
 ;;(set-language-environment "Japanese")
 ;;(setq default-input-method "MW32-IME")
 
-;; default-input-method ‚Ìİ’è‚ğ—LŒø‚É‚·‚é
+;; default-input-method ã®è¨­å®šã‚’æœ‰åŠ¹ã«ã™ã‚‹
 ;;(mw32-ime-initialize)
 
 
-;;15.2.2 “Œ‰_ƒtƒHƒ“ƒg‚ğg‚¤ (2004/01/25)
+;;15.2.2 æ±é›²ãƒ•ã‚©ãƒ³ãƒˆã‚’ä½¿ã† (2004/01/25)
 (load "shinonome-setup")
 
-;;15.2.3 MS ƒSƒVƒbƒN‚È‚Ç‚Ìİ’è 
+;;15.2.3 MS ã‚´ã‚·ãƒƒã‚¯ãªã©ã®è¨­å®š 
 ;;(load "windows-fonts-setup")
 
 
-;;21.7.1 •¶‘®Œ` (‹@íˆË‘¶•¶š‚Ìíœ) \ text-adjust (2003/06/27)
+;;21.7.1 æ–‡æ›¸æ•´å½¢ (æ©Ÿç¨®ä¾å­˜æ–‡å­—ã®å‰Šé™¤) â€” text-adjust (2003/06/27)
 (load-library "text-adjust")
 (setq adaptive-fill-regexp "[ \t]*")
 (setq adaptive-fill-mode t)
 
 
-;;«‘“o˜^
+;;è¾æ›¸ç™»éŒ²
 (defalias 'toroku-region 'mw32-ime-toroku-region)
