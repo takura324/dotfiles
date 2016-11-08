@@ -65,19 +65,20 @@
 ;;; @ language - input method                                       ;;;
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 
-;; モードラインの表示文字列
-(setq-default w32-ime-mode-line-state-indicator "[Aa] ")
-(setq w32-ime-mode-line-state-indicator-list '("[Aa]" "[あ]" "[Aa]"))
-
-;; IME初期化
 (when (eq system-type 'cygwin)
-  (w32-ime-initialize))
+  ;; モードラインの表示文字列
+  (setq-default w32-ime-mode-line-state-indicator "[Aa] ")
+  (setq w32-ime-mode-line-state-indicator-list '("[Aa]" "[あ]" "[Aa]"))
 
-;; デフォルトIME
-(setq default-input-method "W32-IME")
+  ;; IME初期化
+  (w32-ime-initialize)
 
-;; IME変更
-(global-set-key (kbd "C-\\") 'toggle-input-method)
+  ;; デフォルトIME
+  (setq default-input-method "W32-IME")
+
+  ;; IME変更
+  (global-set-key (kbd "C-\\") 'toggle-input-method)
+)
 
 ;; 漢字/変換キー入力時のエラーメッセージ抑止
 (global-set-key (kbd "<M-kanji>") 'ignore)
@@ -622,7 +623,7 @@
      (awk-mode . "awk")
      (other . "gnu"))))
  '(debug-on-error nil)
- '(temporary-file-directory "/c/Users/koyama/AppData/Local/Temp/gnupack")
+;; '(temporary-file-directory "/c/Users/koyama/AppData/Local/Temp/gnupack")
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
