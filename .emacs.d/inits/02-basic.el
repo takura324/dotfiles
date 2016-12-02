@@ -46,6 +46,9 @@
 (define-key global-map (kbd "<end>") 'end-of-buffer)
 
 ;;(global-set-key (kbd "C-@") 'dabbrev-expand)
+;;(define-key global-map (kbd "C-z") 'undo)
+(global-unset-key "\C-z")
+(global-set-key "\C-z" 'undo)
 
 ;;----------------------------------------------------------------------
 ;;タブ幅の設定

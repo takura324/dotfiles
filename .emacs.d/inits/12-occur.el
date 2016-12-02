@@ -107,10 +107,8 @@
 ;;----------------------------------------------------------------------
 (setq dmoccur-list
       '(
-        ("delphi" "/d/Project/PharmIB/PharmClt/" ("\\.pas$") nil)
-        ("elisp" "~/elisp" ("\\.el$") nil)
-        ("config" "~/mylisp/"  ("\\.js" "\\.el$") nil)
-        ("1.99" "e:/unix/Meadow2/1.99a6/" (".*") sub)
+        ("inits" "~/.emacs.d/inits" ("\\.el$") nil)
+        ("junk" "~/memo/junk" ("\\.el$") nil)
         ("dir" default-directory (".*") dir nil my-dmoccur-word)
 
         ("node" "~/www/soft/" ("\\.texi$") nil

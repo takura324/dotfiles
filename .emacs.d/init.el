@@ -53,7 +53,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (helm-anything ace-isearch helm-migemo helm-swoop package-utils visual-regexp-steroids visual-regexp bm goto-chg ace-jump-mode recentf-ext helm-descbinds helm flycheck auto-complete-c-headers srefactor point-undo undo-tree wgrep auto-complete anything-replace-string anything-git-files anything-exuberant-ctags anything auto-install redo+ migemo howm color-theme color-moccur browse-kill-ring))))
+    (auto-async-byte-compile paredit lispxmp open-junk-file helm-anything ace-isearch helm-migemo helm-swoop package-utils visual-regexp-steroids visual-regexp bm goto-chg ace-jump-mode recentf-ext helm-descbinds helm flycheck auto-complete-c-headers srefactor point-undo undo-tree wgrep auto-complete anything-replace-string anything-git-files anything-exuberant-ctags anything auto-install redo+ migemo howm color-theme color-moccur browse-kill-ring))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
