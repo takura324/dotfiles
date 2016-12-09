@@ -3,25 +3,36 @@
 ;;
 (require 'helm-config)
 (require 'helm-descbinds)
+(require 'helm-ag)
 
 (helm-mode 1)
 (helm-migemo-mode 1)
+
+;; (defadvice helm-M-x (after before-helm-M-x activate)
+;;   "M-x ではIMEを常にオフにする。"
+;;   (deactivate-input-method))
 
 ;; C-hで前の文字削除
 ;; (define-key helm-map (kbd "C-h") 'delete-backward-char)
 ;; (define-key helm-find-files-map (kbd "C-h") 'delete-backward-char)
 
 ;; キーバインド
-;;(define-key global-map (kbd "C-x b")   'helm-buffers-list)
-(define-key global-map (kbd "C-x b")   'helm-for-files)
-(define-key global-map (kbd "C-x C-f") 'helm-find-files)
-(define-key global-map (kbd "M-x")     'helm-M-x)
-(define-key global-map (kbd "M-y")     'helm-show-kill-ring)
+;;(global-set-key (kbd "C-x b")   'helm-buffers-list)
+(global-set-key (kbd "C-x b")   'helm-for-files)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "M-x")     'helm-M-x)
+(global-set-key (kbd "M-y")     'helm-show-kill-ring)
 
-(define-key global-map (kbd "C-;")   'helm-mini)
-(define-key global-map (kbd "C-c b") 'helm-descbinds)
-(define-key global-map (kbd "C-c o") 'helm-occur)
-(define-key global-map (kbd "C-c i") 'helm-imenu)
+(global-set-key (kbd "C-;")     'helm-mini)
+(global-set-key (kbd "C-c b")   'helm-descbinds)
+(global-set-key (kbd "C-c o")   'helm-occur)
+(global-set-key (kbd "M-o")     'helm-occur)
+(global-set-key (kbd "C-c i")   'helm-imenu)
+(global-set-key (kbd "C-c a")   'helm-apropos)
+
+(global-set-key (kbd "C-M-g")   'helm-ag)
+(global-set-key (kbd "M-g M-g") 'helm-ag)
+(global-set-key (kbd "C-M-k")   'backward-kill-sexp) ;推奨
 
 (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
 (define-key helm-read-file-map (kbd "TAB") 'helm-execute-persistent-action)
@@ -101,6 +112,7 @@
     ad-do-it))
 
 ;;; [2015-03-23 Mon]C-u C-s / C-u C-u C-s
+(eval-when-compile (require 'cl))
 (defun isearch-forward-or-helm-swoop (use-helm-swoop)
   (interactive "p")
   (let (current-prefix-arg
@@ -121,7 +133,7 @@
 ;; 1文字→ace-jump-mode
 ;; 2〜5文字→isearch
 ;; 6文字以上→helm-swoop
-(global-ace-isearch-mode 1)
+;;(global-ace-isearch-mode 1)
 
 
 ;;----------------------------------------------
@@ -193,3 +205,98 @@
 (ignore-errors (helm-anything-set-keys))
 (global-set-key (kbd "M-g M-n") 'helm-resume-and-next)
 (global-set-key (kbd "M-g M-p") 'helm-resume-and-previous)
+
+
+;;----------------------------------------------
+;; helm-c-yasnipet
+;;
+;; yasnipet の helm インターフェース
+;; http://emacs.rubikitch.com/helm-c-yasnippet/
+;;----------------------------------------------
+(require 'yasnippet)
+(require 'helm-c-yasnippet)
+(setq helm-yas-space-match-any-greedy t)
+(global-set-key (kbd "C-c y") 'helm-yas-complete)
+(push '("emacs.+/snippets/" . snippet-mode) auto-mode-alist)
+(yas-global-mode 1)
+
+
+;;----------------------------------------------
+;; ac-helm
+;;
+;; auto-complete の helm インターフェース
+;;----------------------------------------------
+(require 'ac-helm) ;; Not necessary if using ELPA package
+(global-set-key (kbd "C-:") 'ac-complete-with-helm)
+(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
+
+
+;;----------------------------------------------
+;; helm-ag
+;;
+;; 高速Grep の helm インターフェース
+;; http://emacs.rubikitch.com/helm-ag/
+;;----------------------------------------------
+;;(package-install "helm-ag")
+
+;;; ag以外の検索コマンドも使える
+;; (setq helm-ag-base-command "grep -rin")
+;; (setq helm-ag-base-command "csearch -n")
+;; (setq helm-ag-base-command "pt --nocolor --nogroup")
+(setq helm-ag-base-command "rg --vimgrep --no-heading")
+
+;;; 現在のシンボルをデフォルトのクエリにする
+(setq helm-ag-insert-at-point 'symbol)
+
+(defun helm-ag-dot-emacs ()
+  ".emacs.d以下を検索"
+  (interactive)
+  (helm-ag "~/.emacs.d/"))
+(defalias 'agem 'helm-ag-dot-emacs)
+
+(defun helm-ag-dot-emacs-inits ()
+  ".emacs.d/inits以下を検索"
+  (interactive)
+  (helm-ag "~/.emacs.d/inits/"))
+(defalias 'agemi 'helm-ag-dot-emacs-inits)
+
+(require 'projectile nil t)
+(defun helm-projectile-ag ()
+  "Projectileと連携"
+  (interactive)
+  (helm-ag (projectile-project-root)))
+;; (helm-ag "~/.emacs.d/")
+
+
+;;----------------------------------------------
+;; ace-jump-helm-line.el :
+;;
+;; 画面内のhelmの候補を直接選択する
+;; http://emacs.rubikitch.com/ace-jump-helm-line/
+;;----------------------------------------------
+;; M-x package-install ace-jump-helm-line
+
+(require 'ace-jump-helm-line)
+
+(define-key helm-map (kbd "`") 'ace-jump-helm-line--with-error-fallback)
+(define-key helm-map (kbd "@") 'ace-jump-helm-line-and-execute-action)
+
+;;; anything-shortcut-keys-alistと同じように設定
+(setq avy-keys (append "asdfghjklzxcvbnmqwertyuiop" nil))
+
+;;; ちょっとアレンジ
+(defun ajhl--insert-last-char ()
+  (insert (substring (this-command-keys) -1)))
+(defun ace-jump-helm-line--with-error-fallback ()
+  "ヒント文字以外の文字が押されたらその文字を挿入するように修正"
+  (interactive)
+  (condition-case nil
+      (ace-jump-helm-line)
+    (error (ajhl--insert-last-char))))
+(defun ace-jump-helm-line-and-execute-action ()
+  "anything-select-with-prefix-shortcut互換"
+  (interactive)
+  (condition-case nil
+      (progn (ace-jump-helm-line)
+             (helm-exit-minibuffer))
+    (error (ajhl--insert-last-char))))

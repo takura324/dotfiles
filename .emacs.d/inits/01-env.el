@@ -206,3 +206,9 @@
   ;;(color-theme-arjen)
   (color-theme-dark-laptop)
 )
+
+;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
+;;; @ save-load-path
+;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
+(require 'save-load-path)
+(save-load-path-initialize)

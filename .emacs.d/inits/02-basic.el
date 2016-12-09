@@ -2,9 +2,10 @@
 (setq history-delete-duplicates t)
 
 ;;; ファイルを開いた位置を保存する
-(require 'saveplace)
-(setq-default save-place t)
-(setq save-place-file (concat user-emacs-directory "places"))
+;; (require 'saveplace)
+;; (setq-default save-place t)
+(save-place-mode 1)
+;;(setq save-place-file (concat user-emacs-directory "places"))
 
 ;;; ミニバッファ履歴を次回Emacs起動時にも保存する
 (savehist-mode 1)
@@ -46,9 +47,9 @@
 (define-key global-map (kbd "<end>") 'end-of-buffer)
 
 ;;(global-set-key (kbd "C-@") 'dabbrev-expand)
-;;(define-key global-map (kbd "C-z") 'undo)
+;;(global-set-key "\C-z" 'undo)
 (global-unset-key "\C-z")
-(global-set-key "\C-z" 'undo)
+(global-unset-key (kbd "C-x i"))
 
 ;;----------------------------------------------------------------------
 ;;タブ幅の設定
@@ -96,3 +97,14 @@
         try-expand-dabbrev
         try-expand-dabbrev-all-buffers
         try-expand-dabbrev-from-kill))
+
+
+;;--------------------------------------------------------------------------------
+;; popwin
+;;--------------------------------------------------------------------------------
+(require 'popwin)
+(setq display-buffer-function 'popwin:display-buffer)
+(global-set-key (kbd "C-z") popwin:keymap)
+
+(add-to-list 'popwin:special-display-config "*trace-output*")
+(add-to-list 'popwin:special-display-config "*xref*")

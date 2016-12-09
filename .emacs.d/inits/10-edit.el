@@ -44,8 +44,8 @@
 ;; (package-install 'point-undo)
 ;; point-undoの設定
 (when (require 'point-undo nil t)
-  (define-key global-map [f7] 'point-undo)
-  (define-key global-map [M-f7] 'point-redo)
+  (define-key global-map (kbd "<f7>") 'point-undo)
+  (define-key global-map (kbd "M-<f7>") 'point-redo)
   )
 
 ;;----------------------------------------------------------------------
@@ -53,8 +53,8 @@
 ;; http://emacs.rubikitch.com/sd1501-packages/
 ;;----------------------------------------------------------------------
 (when (require 'goto-chg)
-  (global-set-key [f8] 'goto-last-change)
-  (global-set-key [M-f8] 'goto-last-change-reverse)
+  (global-set-key (kbd "<f8>") 'goto-last-change)
+  (global-set-key (kbd "M-<f8>") 'goto-last-change-reverse)
   )
 
 ;;----------------------------------------------------------------------
@@ -134,10 +134,15 @@
 ;; (package-install 'auto-complete)
 (when (require 'auto-complete-config nil t)
   (add-to-list 'ac-dictionary-directories
-    "~/.emacs.d/elisp/ac-dict")
+               "~/.emacs.d/elisp/ac-dict")
   (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
   (ac-config-default))
 
+;; M-p M-n で候補を選択
+
+;; 全てのバッファで共通の設定
+;; * ファイル名補完を追加
+(setq-default ac-sources (cons 'ac-source-filename ac-sources))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 矩形編集──cua-mode
@@ -146,14 +151,35 @@
 (cua-mode t)
 (setq cua-enable-cua-keys nil)
 
+;; C-Enter
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; visual-regexp: 正規表現置換を対話的に行う
-;; http://emacs.rubikitch.com/sd1501-packages/
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(when (require 'visual-regexp)
-  (require 'visual-regexp-steroids)
-  ;;(setq vr/engine 'pcre2el)
-  (global-set-key (kbd "M-%") 'vr/query-replace)
-  ;;(define-key vr/minibuffer-keymap (kbd "C-j") 'skk-insert)
-  )
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; visual-regexp: 正規表現置換を対話的に行う
+;; ;; http://emacs.rubikitch.com/sd1501-packages/
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (when (require 'visual-regexp)
+;;   (require 'visual-regexp-steroids)
+;;   ;;(setq vr/engine 'pcre2el)
+;;   (global-set-key (kbd "M-%") 'vr/query-replace)
+;;   ;;(define-key vr/minibuffer-keymap (kbd "C-j") 'skk-insert)
+;;   )
+
+
+;;;-----------------------------------------------------------------------------
+;;; re-builder
+;;;-----------------------------------------------------------------------------
+;; C-c C-i で正規表現の文法を設定
+;; C-c C-w でキルリングに入れる
+;; C-c C-q で終了
+
+;;;-----------------------------------------------------------------------------
+;;; pcre2el
+;;;-----------------------------------------------------------------------------
+
+;; M-x rxt-mode でRegular eXpression Translationマイナーモードを
+;; 有効にすると、以下のコマンドが使えます。
+;; C-c / /     rxt-explain 正規表現を解説
+;; C-c / c     rxt-convert-syntax Emacs/PCRE間の変換し、kill-ringへ
+;; C-c / x     rxt-convert-to-rx rxへの変換
+;; C-c / ′     rxt-convert-to-strings 文字列集合へ分解
+

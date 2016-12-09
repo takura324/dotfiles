@@ -14,7 +14,7 @@
 (defun explorer (&optional path)
   "引数があればそのパスの、引数が省略されていれば現在のバッファのファイルを、explorerで開きます。"
   (interactive)
-  (setq path (expand-file-name (or path (buffer-file-name))))
+  (setq path (expand-file-name (or path (file-name-directory (buffer-file-name)))))
   (cond
     ((not (file-exists-p path))
      (message "path %s isn't exist" path))

@@ -53,10 +53,12 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (auto-async-byte-compile paredit lispxmp open-junk-file helm-anything ace-isearch helm-migemo helm-swoop package-utils visual-regexp-steroids visual-regexp bm goto-chg ace-jump-mode recentf-ext helm-descbinds helm flycheck auto-complete-c-headers srefactor point-undo undo-tree wgrep auto-complete anything-replace-string anything-git-files anything-exuberant-ctags anything auto-install redo+ migemo howm color-theme color-moccur browse-kill-ring))))
+    (auto-complete-clang auto-complete-clang-async iedit ace-jump-helm-line dumb-jump helm-ag projectile el-expectations save-load-path popwin ac-helm helm-c-yasnippet pcre2el auto-async-byte-compile paredit lispxmp open-junk-file helm-anything ace-isearch helm-migemo helm-swoop package-utils visual-regexp-steroids visual-regexp bm goto-chg ace-jump-mode recentf-ext helm-descbinds helm flycheck auto-complete-c-headers srefactor point-undo undo-tree wgrep auto-complete anything-replace-string anything-git-files anything-exuberant-ctags anything auto-install redo+ migemo howm color-theme color-moccur browse-kill-ring))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page 'disabled nil)

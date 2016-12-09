@@ -59,8 +59,24 @@
 ;; http://emacs.rubikitch.com/sd1409-migemo-ace-jump-mode-dabbrev/
 ;;--------------------------------------------------------------------------------
 (require 'ace-jump-mode)
-(setq ace-jump-mode-gray-background nil)
+(setq ace-jump-mode-gray-background t)
 (setq ace-jump-word-mode-use-query-char nil)
 (setq ace-jump-mode-move-keys
-(append "asdfghjkl;:]qwertyuiop@zxcvbnm,." nil))
-(global-set-key (kbd "C-:") 'ace-jump-word-mode)
+      (append "asdfghjkl;:]qwertyuiop@zxcvbnm,." nil))
+(global-set-key (kbd "C-c ;") 'ace-jump-word-mode)
+(global-set-key (kbd "C-c :") 'ace-jump-line-mode)
+(global-set-key (kbd "C-c ]") 'ace-jump-char-mode)
+
+
+;;--------------------------------------------------------------------------------
+;; dumb-jump.el
+;;
+;; Ｃ言語、Ｃ＋＋対応！すぐ使える多言語対応関数・変数定義ジャンパー
+;; http://emacs.rubikitch.com/dumb-jump/
+;;--------------------------------------------------------------------------------
+;; M-x package-install dumb-jump
+
+;; マイナーモード M-x dumb-jump-mode を有効にしたら、()内のキーバインドが使えます。
+;; dumb-jump-go         (C-M-g) 定義にジャンプする
+;; dumb-jump-back       (C-M-p) ジャンプ前の場所に戻る
+;; dumb-jump-quick-look (C-M-q) 定義位置をエコーエリアに表示する
