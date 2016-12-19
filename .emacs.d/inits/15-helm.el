@@ -1,3 +1,5 @@
+(require 'bind-key)
+
 ;;
 ;; helm
 ;;
@@ -17,22 +19,22 @@
 ;; (define-key helm-find-files-map (kbd "C-h") 'delete-backward-char)
 
 ;; キーバインド
-;;(global-set-key (kbd "C-x b")   'helm-buffers-list)
-(global-set-key (kbd "C-x b")   'helm-for-files)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "M-x")     'helm-M-x)
-(global-set-key (kbd "M-y")     'helm-show-kill-ring)
+;;(bind-key "C-x b"   'helm-buffers-list)
+(bind-key "C-x b"   'helm-for-files)
+(bind-key "C-x C-f" 'helm-find-files)
+(bind-key "M-x"     'helm-M-x)
+(bind-key "M-y"     'helm-show-kill-ring)
 
-(global-set-key (kbd "C-;")     'helm-mini)
-(global-set-key (kbd "C-c b")   'helm-descbinds)
-(global-set-key (kbd "C-c o")   'helm-occur)
-(global-set-key (kbd "M-o")     'helm-occur)
-(global-set-key (kbd "C-c i")   'helm-imenu)
-(global-set-key (kbd "C-c a")   'helm-apropos)
+(bind-key "C-;"     'helm-mini)
+(bind-key "C-c b"   'helm-descbinds)
+(bind-key "C-c o"   'helm-occur)
+(bind-key "M-s o"   'helm-occur)
+(bind-key "C-c i"   'helm-imenu)
+(bind-key "C-c a"   'helm-apropos)
 
-(global-set-key (kbd "C-M-g")   'helm-ag)
-(global-set-key (kbd "M-g M-g") 'helm-ag)
-(global-set-key (kbd "C-M-k")   'backward-kill-sexp) ;推奨
+(bind-key "C-M-g"   'helm-ag)
+(bind-key "M-g M-g" 'helm-ag)
+(bind-key "C-M-k"   'backward-kill-sexp) ;推奨
 
 (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
 (define-key helm-read-file-map (kbd "TAB") 'helm-execute-persistent-action)
@@ -95,15 +97,16 @@
 ;;; 検索結果をcycleしない、お好みで
 (setq helm-swoop-move-to-line-cycle nil)
 
-(cl-defun helm-swoop-nomigemo (&key $query ($multiline current-prefix-arg))
-  "シンボル検索用Migemo無効版helm-swoop"
-  (interactive)
-  (let ((helm-swoop-pre-input-function
-         (lambda () (format "\\_<%s\\_> " (thing-at-point 'symbol)))))
-    (helm-swoop :$source (delete '(migemo) (copy-sequence (helm-c-source-swoop)))
-                :$query $query :$multiline $multiline)))
+;; (cl-defun helm-swoop-nomigemo (&key $query ($multiline current-prefix-arg))
+;;   "シンボル検索用Migemo無効版helm-swoop"
+;;   (interactive)
+;;   (let ((helm-swoop-pre-input-function
+;;          (lambda () (format "\\_<%s\\_> " (thing-at-point 'symbol)))))
+;;     (helm-swoop :$source (delete '(migemo) (copy-sequence (helm-c-source-swoop)))
+;;                 :$query $query :$multiline $multiline)))
 ;;; C-M-:に割り当て
-(global-set-key (kbd "C-M-:") 'helm-swoop-nomigemo)
+;;(bind-key "M-o" 'helm-swoop-nomigemo)
+(bind-key "M-o" 'helm-swoop)
 
 ;;; [2014-11-25 Tue]
 (when (featurep 'helm-anything)
@@ -121,8 +124,9 @@
      (case use-helm-swoop
        (1 'isearch-forward)
        (4 'helm-swoop)
-       (16 'helm-swoop-nomigemo)))))
-(global-set-key (kbd "C-s") 'isearch-forward-or-helm-swoop)
+       ;; (16 'helm-swoop-nomigemo)))))
+       (16 'helm-swoop)))))
+(bind-key "C-s" 'isearch-forward-or-helm-swoop)
 
 ;;----------------------------------------------
 ;; ace-isearch.el
@@ -203,8 +207,8 @@
 ;;; Replace: next-error / previous-error
 ;;(require 'helm-config)
 (ignore-errors (helm-anything-set-keys))
-(global-set-key (kbd "M-g M-n") 'helm-resume-and-next)
-(global-set-key (kbd "M-g M-p") 'helm-resume-and-previous)
+(bind-key "M-g M-n" 'helm-resume-and-next)
+(bind-key "M-g M-p" 'helm-resume-and-previous)
 
 
 ;;----------------------------------------------
@@ -216,7 +220,7 @@
 (require 'yasnippet)
 (require 'helm-c-yasnippet)
 (setq helm-yas-space-match-any-greedy t)
-(global-set-key (kbd "C-c y") 'helm-yas-complete)
+(bind-key "C-c y" 'helm-yas-complete)
 (push '("emacs.+/snippets/" . snippet-mode) auto-mode-alist)
 (yas-global-mode 1)
 
@@ -227,7 +231,7 @@
 ;; auto-complete の helm インターフェース
 ;;----------------------------------------------
 (require 'ac-helm) ;; Not necessary if using ELPA package
-(global-set-key (kbd "C-:") 'ac-complete-with-helm)
+(bind-key "C-:" 'ac-complete-with-helm)
 (define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
 
 
@@ -300,3 +304,30 @@
       (progn (ace-jump-helm-line)
              (helm-exit-minibuffer))
     (error (ajhl--insert-last-char))))
+
+
+;;----------------------------------------------
+;; helm gtags
+;;----------------------------------------------
+(add-hook 'helm-gtags-mode-hook
+          '(lambda ()
+             ;;入力されたタグの定義元へジャンプ
+             (local-set-key (kbd "M-t") 'helm-gtags-find-tag)
+
+             ;;入力タグを参照する場所へジャンプ
+             (local-set-key (kbd "M-r") 'helm-gtags-find-rtag)  
+
+             ;;入力したシンボルを参照する場所へジャンプ
+             (local-set-key (kbd "M-s") 'helm-gtags-find-symbol)
+
+             ;;タグ一覧からタグを選択し, その定義元にジャンプする
+             (local-set-key (kbd "M-l") 'helm-gtags-select)
+
+             ;;ジャンプ前の場所に戻る
+             (local-set-key (kbd "C-t") 'helm-gtags-pop-stack)))
+
+;; (add-hook 'php-mode-hook 'helm-gtags-mode)
+;; (add-hook 'ruby-mode-hook 'helm-gtags-mode)
+(add-hook 'c-mode-common-hook 'helm-gtags-mode)
+
+

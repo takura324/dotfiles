@@ -1,3 +1,5 @@
+(require 'bind-key)
+
 ;;----------------------------------------------------------------------
 ;;ファイルを開く関連の便利ツール
 ;;----------------------------------------------------------------------
@@ -158,9 +160,34 @@
 
 
 ;;----------------------------------------------------------------------
+;; dired-k.el : dired/direxでサイズ・最終更新時刻・git statusで色をつける
+;;
+;; http://emacs.rubikitch.com/dired-k/
+;;----------------------------------------------------------------------
+;;(package-install 'dired-k)
+(require 'dired)
+(define-key dired-mode-map (kbd "g") 'dired-k)
+(add-hook 'dired-initial-position-hook 'dired-k)
+
+
+;;----------------------------------------------------------------------
+;;dired-launch.el : diredでファイルに関連付けられたプログラムを起動する
+;;
+;;http://emacs.rubikitch.com/dired-launch/
+;;----------------------------------------------------------------------
+;;(package-install 'dired-launch)
+
+;;; mimeopenが使えない人はxdg-openで代用
+;;(setq dired-launch-mailcap-friend '("env" "xdg-open"))
+
+;;; これでdired-launch-modeが有効になり[J]が使える
+(dired-launch-enable)
+(define-key dired-launch-mode-map (kbd "O") 'dired-launch-command)
+
+;;----------------------------------------------------------------------
 ;;バッファの移動 — electric-buffer-list
 ;;----------------------------------------------------------------------
-(global-set-key "\C-xe" 'electric-buffer-list)
+(bind-key "\C-xe" 'electric-buffer-list)
 ;;(global-set-key "\C-x\C-b" 'buffer-menu)
 
 
@@ -168,7 +195,7 @@
 ;;さらに便利なバッファリスト— ibuffer 
 ;;----------------------------------------------------------------------
 (require 'ibuffer)
-(global-set-key "\C-x\C-b" 'ibuffer)
+(bind-key "\C-x\C-b" 'ibuffer)
 
 (setq ibuffer-formats
       '((mark modified read-only " " (name 30 30)
@@ -296,3 +323,82 @@
           'executable-make-buffer-file-executable-if-script-p)
 
 
+;;----------------------------------------------------------------------
+;;View mode
+;;
+;;http://d.hatena.ne.jp/rubikitch/20081104/1225745862
+;;----------------------------------------------------------------------
+(setq view-read-only t)
+(defvar pager-keybind
+      `( ;; vi-like
+        ("h" . backward-word)
+        ("l" . forward-word)
+        ("j" . next-line)
+        ("k" . previous-line)
+        ;;(";" . gene-word)
+        ("b" . scroll-down)
+        (" " . scroll-up)
+        ;; w3m-like
+        ;; ("m" . gene-word)
+        ;; ("i" . win-delete-current-window-and-squeeze)
+        ("w" . forward-word)
+        ("e" . backward-word)
+        ("(" . point-undo)
+        (")" . point-redo)
+        ("J" . ,(lambda () (interactive) (scroll-up 1)))
+        ("K" . ,(lambda () (interactive) (scroll-down 1)))
+        ;; bm-easy
+        ("." . bm-toggle)
+        ("[" . bm-previous)
+        ("]" . bm-next)
+        ;; langhelp-like
+        ("c" . scroll-other-window-down)
+        ("v" . scroll-other-window)
+        ;; misc
+        ("1" . delete-other-windows)
+        ))
+(defun define-many-keys (keymap key-table &optional includes)
+  (let (key cmd)
+    (dolist (key-cmd key-table)
+      (setq key (car key-cmd)
+            cmd (cdr key-cmd))
+      (if (or (not includes) (member key includes))
+        (define-key keymap key cmd))))
+  keymap)
+
+(defun view-mode-hook0 ()
+  (define-many-keys view-mode-map pager-keybind)
+  ;;(hl-line-mode 1)
+  (define-key view-mode-map " " 'scroll-up))
+(add-hook 'view-mode-hook 'view-mode-hook0)
+
+;; 書き込み不能なファイルはview-modeで開くように
+(defadvice find-file
+  (around find-file-switch-to-view-file (file &optional wild) activate)
+  (if (and (not (file-writable-p file))
+           (not (file-directory-p file)))
+      (view-file file)
+    ad-do-it))
+
+;; 書き込み不能な場合はview-modeを抜けないように
+(defvar view-mode-force-exit nil)
+(defmacro do-not-exit-view-mode-unless-writable-advice (f)
+  `(defadvice ,f (around do-not-exit-view-mode-unless-writable activate)
+     (if (and (buffer-file-name)
+              (not view-mode-force-exit)
+              (not (file-writable-p (buffer-file-name))))
+         (message "File is unwritable, so stay in view-mode.")
+       ad-do-it)))
+
+(do-not-exit-view-mode-unless-writable-advice view-mode-exit)
+(do-not-exit-view-mode-unless-writable-advice view-mode-disable)
+
+
+;;----------------------------------------------------------------------
+;; diff
+;;----------------------------------------------------------------------
+;; Ediff Control Panel 専用のフレームを作成しない。
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
+;; Ediff 画面は垂直に分割する。
+(setq ediff-split-window-function 'split-window-vertically)

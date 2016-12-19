@@ -1,25 +1,70 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 便利なエイリアス
+(require 'bind-key)
+
+;;----------------------------------------------------------------------
+;;タブ幅の設定
+;;----------------------------------------------------------------------
+;;タブ幅を 4 に設定
+(setq-default tab-width 4)
+;;タブ幅の倍数を設定
+(setq tab-stop-list
+  '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
+;;タブではなくスペースを使う
+(setq-default indent-tabs-mode nil)
+(setq indent-line-function 'indent-relative-maybe)
+
+
+;;----------------------------------------------------------------------
+;;便利に編集するための設定
+;;----------------------------------------------------------------------
+(show-paren-mode)
+
+;; リージョンを上書きできるようにする。
+(delete-selection-mode t)
+
+;; ファイルの更新を監視する。
+(global-auto-revert-mode 1)
+
+;;----------------------------------------------------------------------
+;;一行まるごとカット
+;;----------------------------------------------------------------------
+(setq kill-whole-line t)
+
+;;--------------------------------------------------------------------------------
+;; hippie-expand
+;;
+;; http://emacs.rubikitch.com/sd1409-migemo-ace-jump-mode-dabbrev/
+;;--------------------------------------------------------------------------------
+(bind-key "C-@" 'hippie-expand)
+
+(setq hippie-expand-try-functions-list
+      '(try-complete-file-name-partially
+        try-complete-file-name
+        try-expand-dabbrev
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill))
+
+;;----------------------------------------------------------------------
+;; 便利なエイリアス
 ;; dtwをdelete-trailing-whitespaceのエイリアスにする
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;----------------------------------------------------------------------
 (defalias 'dtw 'delete-trailing-whitespace)
 
 (defalias 'areg 'align-regexp)
 ;;(setq align-default-spacing 0)
 
 
-;;----------------------------------------------------------------------
-;貼り付けのカスタマイズ
-;;----------------------------------------------------------------------
-;;貼り付けの拡張 — browse-kill-ring
-;;----------------------------------------------------------------------
-(require 'browse-kill-ring)
-(global-set-key "\M-y" 'browse-kill-ring)
+;; ;;----------------------------------------------------------------------
+;; ;; 貼り付けのカスタマイズ
+;; ;;----------------------------------------------------------------------
+;; ;;貼り付けの拡張 — browse-kill-ring
+;; ;;----------------------------------------------------------------------
+;; (require 'browse-kill-ring)
+;; (bind-key "\M-y" 'browse-kill-ring)
 
-;; kill-ring の内容を表示する際の区切りを指定する
-(setq browse-kill-ring-separator "-------")
-;; 現在選択中の kill-ring のハイライトする
-(setq browse-kill-ring-highlight-current-entry t)
+;; ;; kill-ring の内容を表示する際の区切りを指定する
+;; (setq browse-kill-ring-separator "-------")
+;; ;; 現在選択中の kill-ring のハイライトする
+;; (setq browse-kill-ring-highlight-current-entry t)
 
 
 ;;----------------------------------------------------------------------
@@ -35,7 +80,7 @@
 ;; やり直し — redo
 ;;----------------------------------------------------------------------
 (require 'redo+)
-(global-set-key "\M-]" 'redo)
+(bind-key "\M-]" 'redo)
 
 
 ;;----------------------------------------------------------------------
@@ -53,8 +98,8 @@
 ;; http://emacs.rubikitch.com/sd1501-packages/
 ;;----------------------------------------------------------------------
 (when (require 'goto-chg)
-  (global-set-key (kbd "<f8>") 'goto-last-change)
-  (global-set-key (kbd "M-<f8>") 'goto-last-change-reverse)
+  (bind-key "<f8>" 'goto-last-change)
+  (bind-key "M-<f8>" 'goto-last-change-reverse)
   )
 
 ;;----------------------------------------------------------------------
@@ -72,9 +117,9 @@
   (add-hook 'kill-emacs-hook '(lambda nil
                                 (bm-buffer-save-all)
                                 (bm-repository-save)))
-  (global-set-key (kbd "M-SPC") 'bm-toggle)
-  (global-set-key (kbd "M-[") 'bm-previous)
-  (global-set-key (kbd "M-]") 'bm-next)
+  (bind-key "M-SPC" 'bm-toggle)
+  (bind-key "M-[" 'bm-previous)
+  (bind-key "M-]" 'bm-next)
 )
 
 ;;----------------------------------------------------------------------
@@ -107,6 +152,21 @@
       (replace-regexp "\\([A-Z]\\)" "_\\1" nil start end)
       (upcase-region (point-min) (point-max)))))
 
+(defun escape-win-path (start end)
+  "windows のパス文字列をエスケープする（C言語用）"
+  (interactive "r")
+  (save-excursion
+    (when (/= (char-after start) ?\")
+      (if (search-backward "\"" nil t)
+          (setq start (point))        ))
+    (when (or (/= (char-before end) ?\")
+              (= start end))
+      (if (search-forward "\"")
+          (setq end (point))))
+
+    (if (and start end)
+        (replace-regexp "\\\\" "\\\\\\\\" nil start end))
+    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; モードライン
@@ -150,8 +210,9 @@
 ;; cua-modeの設定
 (cua-mode t)
 (setq cua-enable-cua-keys nil)
+;;(setq cua-rectangle-mark-key "<M-return>")
 
-;; C-Enter
+;; Ctrl-Enter
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;; visual-regexp: 正規表現置換を対話的に行う
@@ -160,7 +221,7 @@
 ;; (when (require 'visual-regexp)
 ;;   (require 'visual-regexp-steroids)
 ;;   ;;(setq vr/engine 'pcre2el)
-;;   (global-set-key (kbd "M-%") 'vr/query-replace)
+;;   (bind-key "M-%" 'vr/query-replace)
 ;;   ;;(define-key vr/minibuffer-keymap (kbd "C-j") 'skk-insert)
 ;;   )
 
@@ -183,3 +244,15 @@
 ;; C-c / x     rxt-convert-to-rx rxへの変換
 ;; C-c / ′     rxt-convert-to-strings 文字列集合へ分解
 
+
+;;-----------------------------------------------------------------------------
+;; mwim.el : コードの先頭・末尾を認識したC-a/C-eを定義する
+;;
+;; http://emacs.rubikitch.com/mwim/
+;;-----------------------------------------------------------------------------
+;;(package-install 'mwim)
+
+(bind-key "C-a" 'mwim-beginning-of-code-or-line)
+(bind-key "C-e" 'mwim-end-of-code-or-line)
+;; (bind-key "C-a" 'mwim-beginning-of-line-or-code)
+;; (bind-key "C-e" 'mwim-end-of-line-or-code)

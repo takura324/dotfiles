@@ -19,3 +19,28 @@
                   ) default-frame-alist) )
   (setq initial-frame-alist default-frame-alist))
 
+
+;;----------------------------------------------------------------
+;;; @ language - coding system                                      ;;;
+;;----------------------------------------------------------------
+
+;; (describe-current-coding-system)
+;; (set-language-environment "Japanese")
+;; (prefer-coding-system 'utf-8)
+
+;; ;; デフォルトの文字コード
+;; (set-default-coding-systems 'utf-8-unix)
+
+;; ;; テキストファイル／新規バッファの文字コード
+;; (prefer-coding-system 'utf-8-unix)
+
+;; ;; ファイル名の文字コード
+(set-file-name-coding-system 'shift_jis)
+
+;; ;; キーボード入力の文字コード
+;; (set-keyboard-coding-system 'utf-8-unix)
+
+;; ;; サブプロセスのデフォルト文字コード
+(setq default-process-coding-system '(undecided-dos . utf-8-unix))
+;; ;;(setq default-process-coding-system '(undecided-dos . undecided-dos))
+;; ;;(setq default-process-coding-system '(sjis-dos . utf-8-unix))

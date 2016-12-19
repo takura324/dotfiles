@@ -1,3 +1,5 @@
+(require 'bind-key)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 候補選択型インタフェース──Anything
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -63,13 +65,13 @@
    anything-c-moccur-enable-initial-pattern t)
 
   ;; キーバインドの割当(好みに合わせて設定してください)
-  (global-set-key (kbd "M-o") 'anything-c-moccur-occur-by-moccur)
-  (global-set-key (kbd "C-M-o") 'anything-c-moccur-dmoccur)
+  (bind-key "M-o" 'anything-c-moccur-occur-by-moccur)
+  (bind-key "C-M-o" 'anything-c-moccur-dmoccur)
   (add-hook 'dired-mode-hook
             '(lambda ()
                (local-set-key (kbd "O") 'anything-c-moccur-dired-do-moccur-by-moccur)))
-  (global-set-key (kbd "C-M-s") 'anything-c-moccur-isearch-forward)
-  (global-set-key (kbd "C-M-r") 'anything-c-moccur-isearch-backward)
+  (bind-key "C-M-s" 'anything-c-moccur-isearch-forward)
+  (bind-key "C-M-r" 'anything-c-moccur-isearch-backward)
 
   (define-key anything-c-moccur-anything-map (kbd "<down>")  'anything-c-moccur-next-line)
   (define-key anything-c-moccur-anything-map (kbd "<up>")  'anything-c-moccur-previous-line)

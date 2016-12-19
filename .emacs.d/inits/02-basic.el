@@ -1,3 +1,30 @@
+;;----------------------------------------------------------------------
+;; bind-key
+;;
+;; http://emacs.rubikitch.com/bind-key/
+;;----------------------------------------------------------------------
+;;(package-install 'bind-key)
+;;
+;; <sample>
+;;
+;; (global-set-key (kbd "C-c x") 'my-ctrl-c-x-command)
+;; ↓
+;; (bind-key "C-c x" 'my-ctrl-c-x-command)
+;;
+;; (define-key some-other-mode-map (kbd "C-c x") 'my-ctrl-c-x-command)
+;; ↓
+;; (bind-key "C-c x" 'my-ctrl-c-x-command some-other-mode-map)
+;;
+;; (define-key dired-mode-map "o" 'dired-omit-mode)
+;; (define-key dired-mode-map "a" 'some-other-mode-map)
+;; ↓
+;; (bind-keys :map dired-mode-map
+;;            ("o" . dired-omit-mode)
+;;            ("a" . some-custom-dired-function))
+;;
+;; (describe-personal-keybindings)
+(require 'bind-key)
+
 ;;; 同じ内容を履歴に記録しないようにする
 (setq history-delete-duplicates t)
 
@@ -26,25 +53,25 @@
 ;; C-h を backspace にする
 (keyboard-translate ?\C-h ?\C-?)
 
-(define-key global-map (kbd "C-x ?") 'help-command)
+(bind-key "C-x ?" 'help-command)
 
 ;; C-x j  で指定行へ移動
-(define-key global-map (kbd "C-x j") 'goto-line)
+(bind-key "C-x j" 'goto-line)
 
 ;; 改行キーでオートインデント
-(define-key global-map "\C-m" 'newline-and-indent)
+(bind-key "\C-m" 'newline-and-indent)
 (setq indent-line-function 'indent-relative-maybe) ;;インデント方法. お好みで. . .
 
 ;; 折り返しトグルコマンド
-(define-key global-map (kbd "C-c l") 'toggle-truncate-lines)
+(bind-key "C-c l" 'toggle-truncate-lines)
 
 ;; C-t でウィンドウを切り替える（transpose-chars を無効）
-(define-key global-map (kbd "C-t") 'other-window)
+(bind-key "C-t" 'other-window)
 
-;;(define-key global-map [f9] 'japanese-zenkaku-region)
+;;(bind-key [f9] 'japanese-zenkaku-region)
 
-(define-key global-map (kbd "<home>") 'beginning-of-buffer)
-(define-key global-map (kbd "<end>") 'end-of-buffer)
+(bind-key "<home>" 'beginning-of-buffer)
+(bind-key "<end>" 'end-of-buffer)
 
 ;;(global-set-key (kbd "C-@") 'dabbrev-expand)
 ;;(global-set-key "\C-z" 'undo)
@@ -52,30 +79,31 @@
 (global-unset-key (kbd "C-x i"))
 
 ;;----------------------------------------------------------------------
-;;タブ幅の設定
+;;キー同時押し
 ;;----------------------------------------------------------------------
-;;タブ幅を 4 に設定
-(setq-default tab-width 4)
-;;タブ幅の倍数を設定
-(setq tab-stop-list
-  '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
-;;タブではなくスペースを使う
-(setq-default indent-tabs-mode nil)
-(setq indent-line-function 'indent-relative-maybe)
+;;(package-install 'key-chord)
+(require 'key-chord)
+;;; タイムラグを設定
+(setq key-chord-two-keys-delay 0.04)
+(setq key-chord-one-key-delay 0.15)
+(key-chord-mode 1)
 
-
-;;----------------------------------------------------------------------
-;;便利に編集するための設定
-;;----------------------------------------------------------------------
-(show-paren-mode)
-
-;; リージョンを上書きできるようにする。
-(delete-selection-mode t)
+(key-chord-define-global "jk" 'view-mode)
+(key-chord-define-global "fd" 'ff-find-other-file)
 
 ;;----------------------------------------------------------------------
-;;一行まるごとカット
+;; which-key.el : 【guide-key改】次のキー操作をよりわかりやすく教えてくれるぞ！
+;;
+;; http://emacs.rubikitch.com/which-key/
 ;;----------------------------------------------------------------------
-(setq kill-whole-line t)
+;;(package-install 'which-key)
+
+;;; 3つの表示方法どれか1つ選ぶ
+(which-key-setup-side-window-bottom)    ;ミニバッファ
+;;(which-key-setup-side-window-right)     ;右端
+;;(which-key-setup-side-window-right-bottom) ;両方使う
+
+(which-key-mode 1)
 
 ;; ;;----------------------------------------------------------------------
 ;; ;;同一ファイル名のバッファ名を分かりやすく — uniquify
@@ -85,26 +113,12 @@
 ;; ;;(setq uniquify-ignore-buffers-re "*[^*]+*")
 
 ;;--------------------------------------------------------------------------------
-;; hippie-expand
-;;
-;; http://emacs.rubikitch.com/sd1409-migemo-ace-jump-mode-dabbrev/
-;;--------------------------------------------------------------------------------
-(global-set-key (kbd "C-@") 'hippie-expand)
-
-(setq hippie-expand-try-functions-list
-      '(try-complete-file-name-partially
-        try-complete-file-name
-        try-expand-dabbrev
-        try-expand-dabbrev-all-buffers
-        try-expand-dabbrev-from-kill))
-
-
-;;--------------------------------------------------------------------------------
 ;; popwin
 ;;--------------------------------------------------------------------------------
 (require 'popwin)
 (setq display-buffer-function 'popwin:display-buffer)
-(global-set-key (kbd "C-z") popwin:keymap)
+(bind-key "C-z" 'popwin:keymap)
 
 (add-to-list 'popwin:special-display-config "*trace-output*")
 (add-to-list 'popwin:special-display-config "*xref*")
+

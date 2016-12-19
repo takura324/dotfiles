@@ -1,9 +1,11 @@
+(require 'bind-key)
+
 ;;;-----------------------------------------------------------------------------
 ;;; 試行錯誤用ファイルを開くための設定
 ;;;-----------------------------------------------------------------------------
 (require 'open-junk-file)
 ;; C-x C-z で試行錯誤ファイルを開く
-(global-set-key (kbd "C-x C-z") 'open-junk-file)
+(bind-key "C-x C-z" 'open-junk-file)
 (setq open-junk-file-format "~/memo/junk/%Y/%m/%Y-%m-%d-%H%M%S.")
 
 ;;;-----------------------------------------------------------------------------
@@ -49,3 +51,8 @@
 ;; C-M-SPC  mark-sexp
 ;; C-M-k    kill-sexp
 ;; C-M-t    transpose-sexps
+
+
+;; init.el レスポンス測定
+;;(package-install 'esup)
+;;(package-install 'noflet)

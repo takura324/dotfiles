@@ -2,7 +2,7 @@
 ;; 書き散らかしメモツール — howm 
 ;;----------------------------------------------------------------------
 (setq howm-menu-lang 'ja)
-;;(global-set-key "\C-c,," 'howm-menu)
+;;(bind-key "\C-c,," 'howm-menu)
 (mapc
  (lambda (f)
    (autoload f "howm" "Hitori Otegaru Wiki Modoki" t))

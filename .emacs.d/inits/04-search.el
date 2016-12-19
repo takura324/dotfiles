@@ -1,3 +1,5 @@
+(require 'bind-key)
+
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 ;;; @ search - isearch                                              ;;;
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
@@ -63,9 +65,9 @@
 (setq ace-jump-word-mode-use-query-char nil)
 (setq ace-jump-mode-move-keys
       (append "asdfghjkl;:]qwertyuiop@zxcvbnm,." nil))
-(global-set-key (kbd "C-c ;") 'ace-jump-word-mode)
-(global-set-key (kbd "C-c :") 'ace-jump-line-mode)
-(global-set-key (kbd "C-c ]") 'ace-jump-char-mode)
+(bind-key "C-c ;" 'ace-jump-word-mode)
+(bind-key "C-c :" 'ace-jump-line-mode)
+(bind-key "C-c ]" 'ace-jump-char-mode)
 
 
 ;;--------------------------------------------------------------------------------

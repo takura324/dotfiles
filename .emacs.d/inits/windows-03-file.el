@@ -22,3 +22,15 @@
      (let ((dos-path (replace-regexp-in-string "/" "\\\\" path)))
        (message dos-path)
        (w32-shell-execute "open" "explorer.exe" (concat "/e," dos-path))))))
+
+
+;;----------------------------------------------------------------
+;; カレントバッファのファイルをWindows標準コマンドで開く
+;;----------------------------------------------------------------
+(defun w32-shell-execute-open-current-buffer-file ()
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if (file-exists-p filename)
+        (w32-shell-execute "open" filename nil 1))
+    ))
+

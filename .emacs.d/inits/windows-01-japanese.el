@@ -13,11 +13,11 @@
 (setq default-input-method "W32-IME")
 
 ;; ;; IME変更
-;; (global-set-key (kbd "C-\\") 'toggle-input-method)
+;; (bind-key "C-\\" 'toggle-input-method)
 
 ;; ;; 漢字/変換キー入力時のエラーメッセージ抑止
-;; ;;(global-set-key (kbd "<M-kanji>") 'ignore)
-;; ;;(global-set-key (kbd "<kanji>") 'ignore)
+;; ;;(bind-key "<M-kanji>" 'ignore)
+;; ;;(bind-key "<kanji>" 'ignore)
 
 ;; Altキーを使用せずにMetaキーを使用
 (setq w32-alt-is-meta t)
