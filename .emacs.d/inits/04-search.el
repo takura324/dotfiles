@@ -14,20 +14,23 @@
 (setq isearch-allow-scroll nil)
 
 ;; C-dで検索文字列を一文字削除
-(define-key isearch-mode-map (kbd "C-d") 'isearch-delete-char)
+(bind-key "C-d" 'isearch-delete-char isearch-mode-map)
 
 ;; C-yで検索文字列にヤンク貼り付け
-(define-key isearch-mode-map (kbd "C-y") 'isearch-yank-kill)
+(bind-key "C-y" 'isearch-yank-kill isearch-mode-map)
 
 ;; C-eで検索文字列を編集
-(define-key isearch-mode-map (kbd "C-e") 'isearch-edit-string)
+(bind-key "C-e" 'isearch-edit-string isearch-mode-map)
 
 ;; Tabで検索文字列を補完
-(define-key isearch-mode-map (kbd "TAB") 'isearch-yank-word)
+(bind-key "TAB" 'isearch-yank-word isearch-mode-map)
 
 ;; C-gで検索を終了
-(define-key isearch-mode-map (kbd "C-g")
-  '(lambda() (interactive) (isearch-done)))
+(defun isearch-done-interactive ()
+  (interactive)
+  (isearch-done))
+
+(bind-key "C-g" 'isearch-done-interactive isearch-mode-map)
 
 
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;

@@ -15,8 +15,8 @@
 ;;   (deactivate-input-method))
 
 ;; C-hで前の文字削除
-;; (define-key helm-map (kbd "C-h") 'delete-backward-char)
-;; (define-key helm-find-files-map (kbd "C-h") 'delete-backward-char)
+;; (bind-key "C-h" 'delete-backward-char helm-map)
+;; (bind-key "C-h" 'delete-backward-char helm-find-files-map)
 
 ;; キーバインド
 ;;(bind-key "C-x b"   'helm-buffers-list)
@@ -36,9 +36,9 @@
 (bind-key "M-g M-g" 'helm-ag)
 (bind-key "C-M-k"   'backward-kill-sexp) ;推奨
 
-(define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
-(define-key helm-read-file-map (kbd "TAB") 'helm-execute-persistent-action)
-;;(define-key helm-M-x-map (kbd "TAB") 'helm-execute-persistent-action)
+(bind-key "TAB" 'helm-execute-persistent-action helm-find-files-map)
+(bind-key "TAB" 'helm-execute-persistent-action helm-read-file-map)
+;;(bind-key "TAB" 'helm-execute-persistent-action helm-M-x-map)
 
 ;; Emulate `kill-line' in helm minibuffer
 (setq helm-delete-minibuffer-contents-from-point t)
@@ -91,8 +91,8 @@
 
 (require 'helm-swoop)
 ;;; isearchからの連携を考えるとC-r/C-sにも割り当て推奨
-(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+(bind-key "C-r" 'helm-previous-line helm-swoop-map)
+(bind-key "C-s" 'helm-next-line helm-swoop-map)
 
 ;;; 検索結果をcycleしない、お好みで
 (setq helm-swoop-move-to-line-cycle nil)
@@ -224,6 +224,13 @@
 (push '("emacs.+/snippets/" . snippet-mode) auto-mode-alist)
 (yas-global-mode 1)
 
+(defun view-mode-hook1 ()
+  (define-many-keys view-mode-map pager-keybind)
+  ;;(hl-line-mode 1)
+  ;;(bind-key " " 'scroll-up view-mode-map)
+  )
+(add-hook 'view-mode-hook 'view-mode-hook1)
+
 
 ;;----------------------------------------------
 ;; ac-helm
@@ -232,8 +239,7 @@
 ;;----------------------------------------------
 (require 'ac-helm) ;; Not necessary if using ELPA package
 (bind-key "C-:" 'ac-complete-with-helm)
-(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
-
+(bind-key "C-:" 'ac-complete-with-helm ac-complete-mode-map)
 
 ;;----------------------------------------------
 ;; helm-ag
@@ -282,8 +288,8 @@
 
 (require 'ace-jump-helm-line)
 
-(define-key helm-map (kbd "`") 'ace-jump-helm-line--with-error-fallback)
-(define-key helm-map (kbd "@") 'ace-jump-helm-line-and-execute-action)
+(bind-key "`" 'ace-jump-helm-line--with-error-fallback helm-map)
+(bind-key "@" 'ace-jump-helm-line-and-execute-action helm-map)
 
 ;;; anything-shortcut-keys-alistと同じように設定
 (setq avy-keys (append "asdfghjklzxcvbnmqwertyuiop" nil))
@@ -309,22 +315,31 @@
 ;;----------------------------------------------
 ;; helm gtags
 ;;----------------------------------------------
-(add-hook 'helm-gtags-mode-hook
-          '(lambda ()
-             ;;入力されたタグの定義元へジャンプ
-             (local-set-key (kbd "M-t") 'helm-gtags-find-tag)
+;; (add-hook 'helm-gtags-mode-hook
+;;           '(lambda ()
+;;              ;;入力されたタグの定義元へジャンプ
+;;              (local-set-key "M-t" 'helm-gtags-find-tag)
 
-             ;;入力タグを参照する場所へジャンプ
-             (local-set-key (kbd "M-r") 'helm-gtags-find-rtag)  
+;;              ;;入力タグを参照する場所へジャンプ
+;;              (local-set-key "M-r" 'helm-gtags-find-rtag)  
 
-             ;;入力したシンボルを参照する場所へジャンプ
-             (local-set-key (kbd "M-s") 'helm-gtags-find-symbol)
+;;              ;;入力したシンボルを参照する場所へジャンプ
+;;              (local-set-key "M-s" 'helm-gtags-find-symbol)
 
-             ;;タグ一覧からタグを選択し, その定義元にジャンプする
-             (local-set-key (kbd "M-l") 'helm-gtags-select)
+;;              ;;タグ一覧からタグを選択し, その定義元にジャンプする
+;;              (local-set-key "M-l" 'helm-gtags-select)
 
-             ;;ジャンプ前の場所に戻る
-             (local-set-key (kbd "C-t") 'helm-gtags-pop-stack)))
+;;              ;;ジャンプ前の場所に戻る
+;;              (local-set-key "C-t" 'helm-gtags-pop-stack)))
+
+(require 'helm-gtags)
+(bind-keys :map helm-gtags-mode-map
+             ("M-t" . helm-gtags-find-tag)    ;入力されたタグの定義元へジャンプ
+             ("M-r" . helm-gtags-find-rtag)   ;入力タグを参照する場所へジャンプ  
+             ("M-s" . helm-gtags-find-symbol) ;入力したシンボルを参照する場所へジャンプ
+             ("M-l" . helm-gtags-select)      ;タグ一覧からタグを選択し, その定義元にジャンプする
+             ("C-t" . helm-gtags-pop-stack)   ;ジャンプ前の場所に戻る
+             )
 
 ;; (add-hook 'php-mode-hook 'helm-gtags-mode)
 ;; (add-hook 'ruby-mode-hook 'helm-gtags-mode)

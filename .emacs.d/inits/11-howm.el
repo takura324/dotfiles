@@ -1,8 +1,10 @@
+(require 'bind-key)
+
 ;;----------------------------------------------------------------------
 ;; 書き散らかしメモツール — howm 
 ;;----------------------------------------------------------------------
 (setq howm-menu-lang 'ja)
-;;(bind-key "\C-c,," 'howm-menu)
+(bind-key "C-c ,," 'howm-menu)
 (mapc
  (lambda (f)
    (autoload f "howm" "Hitori Otegaru Wiki Modoki" t))
@@ -75,8 +77,7 @@
     (kill-buffer nil)))
 (eval-after-load "howm"
   '(progn
-     (define-key howm-mode-map
-       "\C-c\C-c" 'my-save-and-kill-buffer)))
+     (bind-key "C-c C-c" 'my-save-and-kill-buffer howm-mode-map)))
 
 ;; メニューを自動更新しない
 (setq howm-menu-refresh-after-save nil)
@@ -86,8 +87,7 @@
 	
 (eval-after-load "calendar"
   '(progn
-     (define-key calendar-mode-map
-       "\C-m" 'my-insert-day)
+     (bind-key "\C-m" 'my-insert-day calendar-mode-map)
      (defun my-insert-day ()
        (interactive)
        (let ((day nil)

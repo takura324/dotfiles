@@ -89,8 +89,8 @@
 ;; (package-install 'point-undo)
 ;; point-undoの設定
 (when (require 'point-undo nil t)
-  (define-key global-map (kbd "<f7>") 'point-undo)
-  (define-key global-map (kbd "M-<f7>") 'point-redo)
+  (bind-key "<f7>" 'point-undo global-map)
+  (bind-key "M-<f7>" 'point-redo global-map)
   )
 
 ;;----------------------------------------------------------------------
@@ -195,7 +195,7 @@
 (when (require 'auto-complete-config nil t)
   (add-to-list 'ac-dictionary-directories
                "~/.emacs.d/elisp/ac-dict")
-  (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+  (bind-key "M-TAB" 'auto-complete ac-mode-map)
   (ac-config-default))
 
 ;; M-p M-n で候補を選択
@@ -214,16 +214,16 @@
 
 ;; Ctrl-Enter
 
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;; visual-regexp: 正規表現置換を対話的に行う
-;; ;; http://emacs.rubikitch.com/sd1501-packages/
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (when (require 'visual-regexp)
-;;   (require 'visual-regexp-steroids)
-;;   ;;(setq vr/engine 'pcre2el)
-;;   (bind-key "M-%" 'vr/query-replace)
-;;   ;;(define-key vr/minibuffer-keymap (kbd "C-j") 'skk-insert)
-;;   )
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; visual-regexp: 正規表現置換を対話的に行う
+;; http://emacs.rubikitch.com/sd1501-packages/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(when (require 'visual-regexp)
+  (require 'visual-regexp-steroids)
+  (setq vr/engine 'pcre2el)
+  (bind-key "M-%" 'vr/query-replace)
+  ;;(bind-key "C-j" 'skk-insert vr/minibuffer-keymap)
+  )
 
 
 ;;;-----------------------------------------------------------------------------

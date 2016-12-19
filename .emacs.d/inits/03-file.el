@@ -20,7 +20,7 @@
 ;;マークをトグル式にする
 ;;----------------------------------------------------------------------
 ;; スペースでマークする (FD like)
-(define-key dired-mode-map " " 'dired-toggle-mark)
+(bind-key " " 'dired-toggle-mark dired-mode-map)
 (defun dired-toggle-mark (arg)
   "Toggle the current (or next ARG) files."
   ;; S.Namba Sat Aug 10 12:20:36 1996
@@ -38,10 +38,11 @@
 ;;----------------------------------------------------------------------
 ;;; dired を使って、一気にファイルの coding system (漢字) を変換する
 (require 'dired-aux)
-(add-hook 'dired-mode-hook
-          (lambda ()
-            (define-key (current-local-map) "T"
-              'dired-do-convert-coding-system)))
+(bind-key "T" 'dired-do-convert-coding-system dired-mode-map)
+
+;; (add-hook 'dired-mode-hook
+;;           (lambda ()
+;;             (define-key "T" 'dired-do-convert-coding-system current-local-map)))
 
 (defvar dired-default-file-coding-system nil
   "*Default coding system for converting file (s).")
@@ -155,8 +156,8 @@
 ;;dired バッファを編集 — 一括リネーム wdired 
 ;;----------------------------------------------------------------------
 (require 'wdired)
-(define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
-(define-key dired-mode-map "e" 'wdired-change-to-wdired-mode)
+(bind-key "r" 'wdired-change-to-wdired-mode dired-mode-map)
+(bind-key "e" 'wdired-change-to-wdired-mode dired-mode-map)
 
 
 ;;----------------------------------------------------------------------
@@ -166,7 +167,7 @@
 ;;----------------------------------------------------------------------
 ;;(package-install 'dired-k)
 (require 'dired)
-(define-key dired-mode-map (kbd "g") 'dired-k)
+(bind-key "g" 'dired-k dired-mode-map)
 (add-hook 'dired-initial-position-hook 'dired-k)
 
 
@@ -180,14 +181,14 @@
 ;;; mimeopenが使えない人はxdg-openで代用
 ;;(setq dired-launch-mailcap-friend '("env" "xdg-open"))
 
-;;; これでdired-launch-modeが有効になり[J]が使える
+;;; これでdired-launch-modeが有効になり[O]が使える
 (dired-launch-enable)
-(define-key dired-launch-mode-map (kbd "O") 'dired-launch-command)
+(bind-key "O" 'dired-launch-command dired-launch-mode-map)
 
 ;;----------------------------------------------------------------------
 ;;バッファの移動 — electric-buffer-list
 ;;----------------------------------------------------------------------
-(bind-key "\C-xe" 'electric-buffer-list)
+(bind-key "C-x e" 'electric-buffer-list)
 ;;(global-set-key "\C-x\C-b" 'buffer-menu)
 
 
@@ -195,7 +196,7 @@
 ;;さらに便利なバッファリスト— ibuffer 
 ;;----------------------------------------------------------------------
 (require 'ibuffer)
-(bind-key "\C-x\C-b" 'ibuffer)
+(bind-key "C-x C-b" 'ibuffer)
 
 (setq ibuffer-formats
       '((mark modified read-only " " (name 30 30)
@@ -211,8 +212,7 @@
 ;;----------------------------------------------------------------------
 ;;ibuffer で文字コードを指定して保存 
 ;;----------------------------------------------------------------------
-(define-key ibuffer-mode-map
-  "T" 'ibuffer-do-convert-coding-system)
+(bind-key "T" 'ibuffer-do-convert-coding-system ibuffer-mode-map)
 (defun ibuffer-do-convert-coding-system
   (coding-system &optional arg)
   "Convert file (s) in specified coding system."
@@ -369,7 +369,8 @@
 (defun view-mode-hook0 ()
   (define-many-keys view-mode-map pager-keybind)
   ;;(hl-line-mode 1)
-  (define-key view-mode-map " " 'scroll-up))
+  ;;(bind-key " " 'scroll-up view-mode-map)
+  )
 (add-hook 'view-mode-hook 'view-mode-hook0)
 
 ;; 書き込み不能なファイルはview-modeで開くように
