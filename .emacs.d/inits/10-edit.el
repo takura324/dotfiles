@@ -256,3 +256,18 @@
 (bind-key "C-e" 'mwim-end-of-code-or-line)
 ;; (bind-key "C-a" 'mwim-beginning-of-line-or-code)
 ;; (bind-key "C-e" 'mwim-end-of-line-or-code)
+
+
+;;-----------------------------------------------------------------------------
+;; diffview
+;;-----------------------------------------------------------------------------
+;;(package-install "diffview")
+(require 'diffview)
+(defun diffview-dwim ()
+  (interactive)
+  (if (region-active-p)
+      (diffview-region)
+    (diffview-current)))
+
+;; M-x diffview-current はカレントバッファ全体、
+;; M-x diffview-region はregionをside by sideで表示します、
