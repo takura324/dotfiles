@@ -35,12 +35,12 @@
 ;;       (shell-command "etags *.[ch] *.cpp *.el .*.el -o TAGS 2>/dev/null"))
 ;;     (visit-tags-table tag-file)))
 
-(defadvice xref-find-definitions (before xref-find-definitions-file activate)
-  "Automatically create tags file."
-  (let ((tag-file (concat default-directory "TAGS")))
-    (unless (file-exists-p tag-file)
-      (shell-command "etags *.[ch] *.cpp *.el .*.el -o TAGS 2>/dev/null"))
-    (visit-tags-table tag-file)))
+;; (defadvice xref-find-definitions (before xref-find-definitions-file activate)
+;;   "Automatically create tags file."
+;;   (let ((tag-file (concat default-directory "TAGS")))
+;;     (unless (file-exists-p tag-file)
+;;       (shell-command "etags *.[ch] *.cpp *.el .*.el -o TAGS 2>/dev/null"))
+;;     (visit-tags-table tag-file)))
 
 
 
@@ -144,27 +144,12 @@
 
 ;; ;;(add-hook 'c-mode-common-hook 'flycheck-mode)
 
-;; ;;----------------------------------------------------------------------
-;; ;; Flycheckによる文法チェック
-;; ;;----------------------------------------------------------------------
-;; (require 'flycheck)
+;;----------------------------------------------------------------------
+;; Flycheckによる文法チェック
+;;----------------------------------------------------------------------
+(require 'flycheck)
 
-;; (flycheck-define-checker c/c++
-;;   "A C/C++ checker using g++."
-;;   :command ("g++" "-Wall" "-Wextra" source)
-;;   :error-patterns  ((error line-start
-;;                            (file-name) ":" line ":" column ":" " エラー: " (message)
-;;                            line-end)
-;;                     (warning line-start
-;;                            (file-name) ":" line ":" column ":" " 警告: " (message)
-;;                            line-end))
-;;   :modes (c-mode c++-mode))
-
-;; ;;(flycheck-select-checker 'c/c++)
-;; (add-hook 'c-mode-common-hook
-;;           '(lambda()
-;;              (flycheck-select-checker 'c/c++)))
-
+(setq-default flycheck-gcc-language-standard "c++11")
 
 
 ;;----------------------------------------------------------------------
@@ -371,3 +356,13 @@
 ;; (add-hook 'view-mode-hook 'view-mode-hook--yafolding)
 
 ;; (bind-key "<C-return>" 'yafolding-toggle-element)
+
+
+;;----------------------------------------------------------------------
+;; egg - git frontend
+;;----------------------------------------------------------------------
+;;(package-install "egg")
+(require 'egg nil t)
+
+;; C-x v s (egg-status)
+;; C-x v l (egg-log)

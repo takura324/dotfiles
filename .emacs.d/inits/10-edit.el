@@ -251,7 +251,7 @@
 ;; http://emacs.rubikitch.com/mwim/
 ;;-----------------------------------------------------------------------------
 ;;(package-install 'mwim)
-
+(require 'mwim)
 (bind-key "C-a" 'mwim-beginning-of-code-or-line)
 (bind-key "C-e" 'mwim-end-of-code-or-line)
 ;; (bind-key "C-a" 'mwim-beginning-of-line-or-code)

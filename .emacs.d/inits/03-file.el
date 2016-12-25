@@ -14,23 +14,23 @@
 ;;----------------------------------------------------------------------
 (load "dired-x")
 
-;;----------------------------------------------------------------------
-;;dired のコマンドを追加/拡張する
-;;----------------------------------------------------------------------
-;;マークをトグル式にする
-;;----------------------------------------------------------------------
-;; スペースでマークする (FD like)
-(bind-key " " 'dired-toggle-mark dired-mode-map)
-(defun dired-toggle-mark (arg)
-  "Toggle the current (or next ARG) files."
-  ;; S.Namba Sat Aug 10 12:20:36 1996
-  (interactive "P")
-  (let ((dired-marker-char
-         (if (save-excursion (beginning-of-line)
-                             (looking-at " "))
-             dired-marker-char ?\040)))
-    (dired-mark arg)
-    (dired-previous-line 1)))
+;; ;;----------------------------------------------------------------------
+;; ;;dired のコマンドを追加/拡張する
+;; ;;----------------------------------------------------------------------
+;; ;;マークをトグル式にする
+;; ;;----------------------------------------------------------------------
+;; ;; スペースでマークする (FD like)
+;; (bind-key " " 'dired-toggle-mark dired-mode-map)
+;; (defun dired-toggle-mark (arg)
+;;   "Toggle the current (or next ARG) files."
+;;   ;; S.Namba Sat Aug 10 12:20:36 1996
+;;   (interactive "P")
+;;   (let ((dired-marker-char
+;;          (if (save-excursion (beginning-of-line)
+;;                              (looking-at " "))
+;;              dired-marker-char ?\040)))
+;;     (dired-mark arg)
+;;     (dired-previous-line 1)))
 
 
 ;;----------------------------------------------------------------------
@@ -167,6 +167,7 @@
 ;;----------------------------------------------------------------------
 ;;(package-install 'dired-k)
 (require 'dired)
+(require 'dired-k)
 (bind-key "g" 'dired-k dired-mode-map)
 (add-hook 'dired-initial-position-hook 'dired-k)
 
@@ -177,7 +178,7 @@
 ;;http://emacs.rubikitch.com/dired-launch/
 ;;----------------------------------------------------------------------
 ;;(package-install 'dired-launch)
-
+(require 'dired-launch)
 ;;; mimeopenが使えない人はxdg-openで代用
 ;;(setq dired-launch-mailcap-friend '("env" "xdg-open"))
 
