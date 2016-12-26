@@ -261,7 +261,7 @@
 ;;-----------------------------------------------------------------------------
 ;; diffview
 ;;-----------------------------------------------------------------------------
-;;(package-install "diffview")
+;;(package-install 'diffview)
 (require 'diffview)
 (defun diffview-dwim ()
   (interactive)

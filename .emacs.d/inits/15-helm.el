@@ -247,7 +247,7 @@
 ;; 高速Grep の helm インターフェース
 ;; http://emacs.rubikitch.com/helm-ag/
 ;;----------------------------------------------
-;;(package-install "helm-ag")
+;;(package-install 'helm-ag)
 
 ;;; ag以外の検索コマンドも使える
 ;; (setq helm-ag-base-command "grep -rin")
@@ -349,6 +349,7 @@
 ;;----------------------------------------------
 ;; helm flycheck
 ;;----------------------------------------------
+;;(package-install 'helm-flycheck)
 (require 'helm-flycheck)
 (eval-after-load 'flycheck
   '(define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
