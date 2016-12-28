@@ -1,5 +1,7 @@
 (require 'bind-key)
 
+(setq line-move-visual nil)
+
 ;;----------------------------------------------------------------------
 ;;タブ幅の設定
 ;;----------------------------------------------------------------------
@@ -12,6 +14,22 @@
 (setq-default indent-tabs-mode nil)
 (setq indent-line-function 'indent-relative-maybe)
 
+;;----------------------------------------------------------------------
+;;全角スペースとタブを表示
+;;----------------------------------------------------------------------
+(setq whitespace-style
+      '(tabs tab-mark spaces space-mark))
+(setq whitespace-space-regexp "\\(\x3000+\\)")
+(setq whitespace-display-mappings
+      '((space-mark ?\x3000 [?\□])
+        (tab-mark   ?\t   [?\xBB ?\t])
+        ))
+(require 'whitespace)
+(global-whitespace-mode 1)
+(set-face-foreground 'whitespace-space "LightSlateGray")
+(set-face-background 'whitespace-space "DarkSlateGray")
+(set-face-foreground 'whitespace-tab "LightSlateGray")
+(set-face-background 'whitespace-tab "DarkSlateGray")
 
 ;;----------------------------------------------------------------------
 ;;便利に編集するための設定
@@ -48,10 +66,10 @@
 ;; dtwをdelete-trailing-whitespaceのエイリアスにする
 ;;----------------------------------------------------------------------
 (defalias 'dtw 'delete-trailing-whitespace)
-
 (defalias 'areg 'align-regexp)
 ;;(setq align-default-spacing 0)
-
+(defalias 'ffo 'ff-find-other-file)
+(bind-key "<f12>" 'ff-find-other-file)
 
 ;; ;;----------------------------------------------------------------------
 ;; ;; 貼り付けのカスタマイズ
@@ -221,10 +239,19 @@
 (when (require 'visual-regexp)
   (require 'visual-regexp-steroids)
   (setq vr/engine 'pcre2el)
-  (bind-key "M-%" 'vr/query-replace)
+  (bind-key "C-M-%" 'vr/query-replace)
   ;;(bind-key "C-j" 'skk-insert vr/minibuffer-keymap)
   )
 
+;;;-----------------------------------------------------------------------------
+;;; ez-query-replace.el : 【置換】ちょっと賢くなったM-x query-replace (C-M-%)
+;;;-----------------------------------------------------------------------------
+;;(package-install 'ez-query-replace)
+(require 'ez-query-replace)
+(defun my-ez-query-replace (repeat)
+  (interactive "P")
+  (funcall (if repeat 'ez-query-replace-repeat 'ez-query-replace)))
+(bind-key "M-%" 'my-ez-query-replace)
 
 ;;;-----------------------------------------------------------------------------
 ;;; re-builder
@@ -271,3 +298,61 @@
 
 ;; M-x diffview-current はカレントバッファ全体、
 ;; M-x diffview-region はregionをside by sideで表示します、
+
+(setq ediff-split-window-function 'split-window-vertically)
+
+;;-----------------------------------------------------------------------------
+;; paren-completer.el :
+;; 自動判別で対応する閉括弧を入力する
+;;-----------------------------------------------------------------------------
+;;(package-install 'paren-completer)
+(require 'paren-completer)
+(bind-key "M-)" 'paren-completer-add-single-delimiter)
+
+;;-----------------------------------------------------------------------------
+;; shrink-whitespace.el :
+;; 【M-＼拡張】カーソル周りの複数のホワイトスペースを1つ→除去する
+;;-----------------------------------------------------------------------------
+;;(package-install 'shrink-whitespace)
+(require 'shrink-whitespace)
+(bind-key "M-\\" 'shrink-whitespace)
+
+
+;;-----------------------------------------------------------------------------
+;; smart-newline.el :
+;; 改行の入力方法(C-o, C-j, C-mなど)をRETに統一する
+;;-----------------------------------------------------------------------------
+;;(package-install 'smart-newline)
+(require 'smart-newline)
+
+(bind-key (kbd "C-m") 'smart-newline)
+(add-hook 'ruby-mode-hook 'smart-newline-mode)
+(add-hook 'emacs-lisp-mode-hook 'smart-newline-mode)
+(add-hook 'org-mode-hook 'smart-newline-mode)
+(add-hook 'c-mode-common-hook 'smart-newline-mode)
+
+(defadvice smart-newline (around C-u activate)
+  "C-uを押したら元のC-mの挙動をするようにした。
+org-modeなどで活用。"
+  (if (not current-prefix-arg)
+      ad-do-it
+    (let (current-prefix-arg)
+      (let (smart-newline-mode)
+        (call-interactively (key-binding (kbd "C-m")))))))
+
+;;-----------------------------------------------------------------------------
+;; electric-operator.el :
+;; 【改良版】演算子(=や+=)の前後に自動でスペースを入れる
+;;-----------------------------------------------------------------------------
+;;(package-install 'electric-operator)
+
+(require 'electric-operator)
+
+;;; ruby-modeの場合、===の設定が必要
+(electric-operator-add-rules-for-mode
+ 'ruby-mode
+ (cons "===" " === "))
+
+;;; 使うメジャーモードごとにフックを設定しよう
+(add-hook 'ruby-mode-hook #'electric-operator-mode)
+(add-hook 'c-mode-common-hook #'electric-operator-mode)

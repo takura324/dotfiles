@@ -26,7 +26,7 @@
 ;;(bind-key "M-*" 'pop-tag-mark)
 
 ;;----------------------------------------------------------------------
-;; タグファイルの自動生成 (2003/11/18)
+;; タグファイルの自動生成
 ;;----------------------------------------------------------------------
 ;; (defadvice find-tag (before c-tag-file activate)
 ;;   "Automatically create tags file."
@@ -42,7 +42,24 @@
 ;;       (shell-command "etags *.[ch] *.cpp *.el .*.el -o TAGS 2>/dev/null"))
 ;;     (visit-tags-table tag-file)))
 
+;; (defun after-save-hook--ctags (&rest _)
+;;   (if (and (stringp tags-file-name) (file-exists-p tags-file-name))
+;;       (let ((current-dir-name (file-name-directory (buffer-file-name (current-buffer))))
+;;             (tags-dir-name (file-name-directory tags-file-name)))
+;;         (when (string-prefix-p tags-dir-name current-dir-name)
+;;           (shell-command (format "ctags -e -R \"%s\"" tags-dir-name))
+;;           (visit-tags-table tags-file-name)))))
 
+;; (add-hook 'after-save-hook 'after-save-hook--ctags)
+
+;;(package-install 'ctags-update)
+(require 'ctags-update)
+;;; 注意！exuberant-ctagsを指定する必要がある
+;;; Emacs標準のctagsでは動作しない！！
+;;(setq ctags-update-command "/usr/bin/ctags")
+;;; 使う言語で有効にしよう
+(add-hook 'c-mode-common-hook  'turn-on-ctags-auto-update-mode)
+;;(add-hook 'emacs-lisp-mode-hook  'turn-on-ctags-auto-update-mode)
 
 ;;----------------------------------------------------------------------
 ;; タグジャンプ － gtags ， global (2007/11/29)
@@ -110,7 +127,10 @@
 ;;----------------------------------------------------------------------
 ;; cc-mode
 ;;----------------------------------------------------------------------
+(add-to-list 'auto-mode-alist '("\\.h$" . c++-mode))
+
 (add-to-list 'c-default-style '(c++-mode . "bsd"))
+(add-to-list 'c-default-style '(c-mode . "bsd"))
 
 (setq-default c-basic-offset 4     ;;基本インデント量4
               tab-width 4          ;;タブ幅4
@@ -158,8 +178,8 @@
 ;;(package-install 'srefactor)
 (require 'srefactor)
 
-(define-key c-mode-map (kbd "M-RET") 'srefactor-refactor-at-point)
-(define-key c++-mode-map (kbd "M-RET") 'srefactor-refactor-at-point)
+(bind-key "<M-return>" 'srefactor-refactor-at-point c-mode-map)
+(bind-key "<M-return>" 'srefactor-refactor-at-point c++-mode-map)
 
 ;;----------------------------------------------------------------------
 ;; auto-complete (C ヘッダーファイル)
@@ -167,7 +187,7 @@
 ;;(package-install 'auto-complete-c-headers)
 
 (require 'auto-complete-c-headers)
-(defun my:ac-c-header-init ()　
+(defun my:ac-c-header-init ()
        (add-to-list 'ac-sources 'ac-source-c-headers))
 (add-hook 'c++-mode-hook 'my:ac-c-header-init)
 (add-hook 'c-mode-hook 'my:ac-c-header-init)

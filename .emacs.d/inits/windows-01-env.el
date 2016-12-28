@@ -2,8 +2,8 @@
 (when (>= (display-pixel-height) 1080)
   (setq default-frame-alist
         (append '((width                . 120) ; フレーム幅
-;;                  (height               . 56 ) ; フレーム高
-                  (height               . 43 ) ; フレーム高
+                  (height               . 56 ) ; フレーム高
+;;                  (height               . 43 ) ; フレーム高
                   (left                 . 10 ) ; 配置左位置
                   (top                  . 10 ) ; 配置上位置
                   (line-spacing         . 0  ) ; 文字間隔
@@ -27,13 +27,13 @@
 
 ;; (describe-current-coding-system)
 ;; (set-language-environment "Japanese")
-;; (prefer-coding-system 'utf-8)
+;;(prefer-coding-system 'utf-8-unix)
 
 ;; ;; デフォルトの文字コード
-;; (set-default-coding-systems 'utf-8-unix)
+;;(set-default-coding-systems 'utf-8-unix)
 
 ;; ;; テキストファイル／新規バッファの文字コード
-;; (prefer-coding-system 'utf-8-unix)
+;;(prefer-coding-system 'utf-8-unix)
 
 ;; ;; ファイル名の文字コード
 (set-file-name-coding-system 'shift_jis)
@@ -43,5 +43,7 @@
 
 ;; ;; サブプロセスのデフォルト文字コード
 (setq default-process-coding-system '(undecided-dos . utf-8-unix))
+
 ;; ;;(setq default-process-coding-system '(undecided-dos . undecided-dos))
 ;; ;;(setq default-process-coding-system '(sjis-dos . utf-8-unix))
+
