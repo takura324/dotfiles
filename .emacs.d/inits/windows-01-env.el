@@ -18,8 +18,13 @@
                   (cursor-color         . "snow") 
                   (cursor-type          . box)
                   ) default-frame-alist) )
-  (setq initial-frame-alist default-frame-alist))
 
+  (when (string-equal system-name "TAKURA-NOTE")
+    (add-to-list 'default-frame-alist
+                 '(height . 43)      ; フレーム高
+                 )) 
+  
+  (setq initial-frame-alist default-frame-alist))
 
 ;;----------------------------------------------------------------
 ;;; @ language - coding system                                      ;;;
