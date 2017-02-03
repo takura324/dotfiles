@@ -217,6 +217,12 @@
 ;; yasnipet の helm インターフェース
 ;; http://emacs.rubikitch.com/helm-c-yasnippet/
 ;;----------------------------------------------
+
+;; yasnippet の使い方
+;; C-c & C-n   yas-new-snippet
+;;   C-C C-t でテスト
+;;
+
 (require 'yasnippet)
 (require 'helm-c-yasnippet)
 (setq helm-yas-space-match-any-greedy t)

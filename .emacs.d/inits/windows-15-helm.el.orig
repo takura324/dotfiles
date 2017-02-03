@@ -1,0 +1,36 @@
+;; gtags 文字コード対応
+;;   global の出力文字コードが SJIS のため、UTF-8 に変換する。
+;;   ref http://emacs.rubikitch.com/nadvice/
+(eval-when-compile (require 'cl))
+(require 'helm-gtags)
+(defun my-helm-gtags--tag-directory ()
+    (helm-aif (getenv "GTAGSROOT")
+        it
+      (with-current-buffer (generate-new-buffer (generate-new-buffer-name "*rootdir*"))
+        (unwind-protect
+            (progn
+              (unless (zerop (shell-command "global -p | iconv -c -f sjis -t utf8" (current-buffer)))
+                (error "GTAGS not found"))
+              (goto-char (point-min))
+              (when (looking-at "^\\([^\r\n]+\\)")
+                (let ((tag-path (match-string-no-properties 1)))
+                  (file-name-as-directory
+                   (if (helm-gtags--convert-cygwin-windows-file-name-p)
+                       (cygwin-convert-file-name-from-windows tag-path)
+                     tag-path)))))
+          (kill-buffer (current-buffer))))))
+
+(advice-add 'helm-gtags--tag-directory :override 'my-helm-gtags--tag-directory)
+
+
+(defun my-gtags-get-rootpath ()
+  (let (path buffer)
+    (save-excursion
+      (setq buffer (generate-new-buffer (generate-new-buffer-name "*rootdir*")))
+      (set-buffer buffer)
+      (if (= (shell-command "global -pr | iconv -c -f sjis -t utf8" buffer) 0)
+        (setq path (file-name-as-directory (buffer-substring (point-min)(1- (point-max))))))
+      (kill-buffer buffer))
+    path))
+
+(advice-add 'gtags-get-rootpath :override 'my-gtags-get-rootpath)

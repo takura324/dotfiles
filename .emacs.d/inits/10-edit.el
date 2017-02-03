@@ -147,7 +147,7 @@
 ;;  下記設定で、\C-u \C-SPC \C-SPC \C-SPC ... の連打が可能
 ;;----------------------------------------------------------------------
 (setq set-mark-command-repeat-pop t)
-
+(setq mark-ring-max 32)
 
 ;;----------------------------------------------------------------------
 ;; 適当
@@ -186,11 +186,11 @@
         (replace-regexp "\\\\" "\\\\\\\\" nil start end))
     ))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;----------------------------------------------------------------------
 ;; モードライン
 ;; リージョン内の行数と文字数をモードラインに表示する (pp.89)
 ;; http://d.hatena.ne.jp/sonota88/20110224/1298557375
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;----------------------------------------------------------------------
 
 (defun count-lines-and-chars ()
   (if mark-active
@@ -206,9 +206,10 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;----------------------------------------------------------------------
 ;; 入力の効率化
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;----------------------------------------------------------------------
+
 ;; (package-install 'auto-complete)
 (when (require 'auto-complete-config nil t)
   (add-to-list 'ac-dictionary-directories
@@ -222,9 +223,10 @@
 ;; * ファイル名補完を追加
 (setq-default ac-sources (cons 'ac-source-filename ac-sources))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;----------------------------------------------------------------------
 ;; 矩形編集──cua-mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;----------------------------------------------------------------------
+
 ;; cua-modeの設定
 (cua-mode t)
 (setq cua-enable-cua-keys nil)
@@ -232,10 +234,11 @@
 
 ;; Ctrl-Enter
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;----------------------------------------------------------------------
 ;; visual-regexp: 正規表現置換を対話的に行う
 ;; http://emacs.rubikitch.com/sd1501-packages/
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;----------------------------------------------------------------------
+
 (when (require 'visual-regexp)
   (require 'visual-regexp-steroids)
   (setq vr/engine 'pcre2el)
@@ -243,9 +246,9 @@
   ;;(bind-key "C-j" 'skk-insert vr/minibuffer-keymap)
   )
 
-;;;-----------------------------------------------------------------------------
-;;; ez-query-replace.el : 【置換】ちょっと賢くなったM-x query-replace (C-M-%)
-;;;-----------------------------------------------------------------------------
+;;----------------------------------------------------------------------
+;; ez-query-replace.el : 【置換】ちょっと賢くなったM-x query-replace (C-M-%)
+;;----------------------------------------------------------------------
 ;;(package-install 'ez-query-replace)
 (require 'ez-query-replace)
 (defun my-ez-query-replace (repeat)
@@ -253,16 +256,16 @@
   (funcall (if repeat 'ez-query-replace-repeat 'ez-query-replace)))
 (bind-key "M-%" 'my-ez-query-replace)
 
-;;;-----------------------------------------------------------------------------
-;;; re-builder
-;;;-----------------------------------------------------------------------------
+;;----------------------------------------------------------------------
+;; re-builder
+;;----------------------------------------------------------------------
 ;; C-c C-i で正規表現の文法を設定
 ;; C-c C-w でキルリングに入れる
 ;; C-c C-q で終了
 
-;;;-----------------------------------------------------------------------------
-;;; pcre2el
-;;;-----------------------------------------------------------------------------
+;;----------------------------------------------------------------------
+;; pcre2el
+;;----------------------------------------------------------------------
 
 ;; M-x rxt-mode でRegular eXpression Translationマイナーモードを
 ;; 有効にすると、以下のコマンドが使えます。
@@ -318,34 +321,33 @@
 (bind-key "M-\\" 'shrink-whitespace)
 
 
-;;-----------------------------------------------------------------------------
-;; smart-newline.el :
-;; 改行の入力方法(C-o, C-j, C-mなど)をRETに統一する
-;;-----------------------------------------------------------------------------
-;;(package-install 'smart-newline)
-(require 'smart-newline)
+;; ;;-----------------------------------------------------------------------------
+;; ;; smart-newline.el :
+;; ;; 改行の入力方法(C-o, C-j, C-mなど)をRETに統一する
+;; ;;-----------------------------------------------------------------------------
+;; ;;(package-install 'smart-newline)
+;; (require 'smart-newline)
 
-(bind-key (kbd "C-m") 'smart-newline)
-(add-hook 'ruby-mode-hook 'smart-newline-mode)
-(add-hook 'emacs-lisp-mode-hook 'smart-newline-mode)
-(add-hook 'org-mode-hook 'smart-newline-mode)
-(add-hook 'c-mode-common-hook 'smart-newline-mode)
+;; (bind-key (kbd "C-m") 'smart-newline)
+;; (add-hook 'ruby-mode-hook 'smart-newline-mode)
+;; (add-hook 'emacs-lisp-mode-hook 'smart-newline-mode)
+;; (add-hook 'org-mode-hook 'smart-newline-mode)
+;; (add-hook 'c-mode-common-hook 'smart-newline-mode)
 
-(defadvice smart-newline (around C-u activate)
-  "C-uを押したら元のC-mの挙動をするようにした。
-org-modeなどで活用。"
-  (if (not current-prefix-arg)
-      ad-do-it
-    (let (current-prefix-arg)
-      (let (smart-newline-mode)
-        (call-interactively (key-binding (kbd "C-m")))))))
+;; (defadvice smart-newline (around C-u activate)
+;;   "C-uを押したら元のC-mの挙動をするようにした。
+;; org-modeなどで活用。"
+;;   (if (not current-prefix-arg)
+;;       ad-do-it
+;;     (let (current-prefix-arg)
+;;       (let (smart-newline-mode)
+;;         (call-interactively (key-binding (kbd "C-m")))))))
 
 ;;-----------------------------------------------------------------------------
 ;; electric-operator.el :
 ;; 【改良版】演算子(=や+=)の前後に自動でスペースを入れる
 ;;-----------------------------------------------------------------------------
 ;;(package-install 'electric-operator)
-
 (require 'electric-operator)
 
 ;;; ruby-modeの場合、===の設定が必要
@@ -356,3 +358,4 @@ org-modeなどで活用。"
 ;;; 使うメジャーモードごとにフックを設定しよう
 (add-hook 'ruby-mode-hook #'electric-operator-mode)
 (add-hook 'c-mode-common-hook #'electric-operator-mode)
+(add-hook 'python-mode-hook #'electric-operator-mode)

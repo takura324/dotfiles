@@ -164,6 +164,41 @@
 
 ;; ;;(add-hook 'c-mode-common-hook 'flycheck-mode)
 
+
+;; エラーをミニバッファに表示する
+(defun flymake-display-err-minibuf ()
+  "Displays the error/warning for the current line in the minibuffer"
+  (interactive)
+  (let* ((line-no (line-number-at-pos))
+         (line-err-info-list
+          (nth 0 (flymake-find-err-info flymake-err-info line-no)))
+         (count (length line-err-info-list)))
+    (while (> count 0)
+      (when line-err-info-list
+        (let* ((file (flymake-ler-file (nth (1- count) line-err-info-list)))
+               (full-file (flymake-ler-full-file (nth (1- count) line-err-info-list)))
+               (text (flymake-ler-text (nth (1- count) line-err-info-list)))
+               (line (flymake-ler-line (nth (1- count) line-err-info-list))))
+          (message "[%s] %s" line text)))
+      (setq count (1- count)))))
+
+(defun my-flymake-display-err-menu-for-current-line ()
+  "Displays the error/warning for the current line via popup-tip"
+  (interactive)
+  (let* ((line-no (line-number-at-pos))
+         (line-err-info-list (nth 0 (flymake-find-err-info flymake-err-info line-no)))
+         (menu-data (flymake-make-err-menu-data line-no line-err-info-list)))
+    (if menu-data
+        (popup-tip (mapconcat #'(lambda (err)
+                                  (nth 0 err))
+                              (nth 1 menu-data) "\n")))))
+
+(defadvice flymake-goto-prev-error (after flymake-goto-prev-error-display-message activate)
+  (flymake-display-err-minibuf))
+(defadvice flymake-goto-next-error (after flymake-goto-next-error-display-message activate)
+  (flymake-display-err-minibuf))
+
+
 ;;----------------------------------------------------------------------
 ;; Flycheckによる文法チェック
 ;;----------------------------------------------------------------------

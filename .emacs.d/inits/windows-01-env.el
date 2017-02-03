@@ -22,7 +22,7 @@
 
 
 ;;----------------------------------------------------------------
-;;; @ language - coding system                                      ;;;
+;; @ language - coding system                                     
 ;;----------------------------------------------------------------
 
 ;; (describe-current-coding-system)
@@ -46,4 +46,19 @@
 
 ;; ;;(setq default-process-coding-system '(undecided-dos . undecided-dos))
 ;; ;;(setq default-process-coding-system '(sjis-dos . utf-8-unix))
+
+
+;;----------------------------------------------------------------
+;; @ shell                                                        
+;;----------------------------------------------------------------
+(require 'shell)
+(setq explicit-shell-file-name "bash.exe")
+(setq shell-command-switch "-c")
+(setq shell-file-name "bash.exe")
+
+;; (M-! and M-| and compile.el)
+;;(setq shell-file-name "bash.exe")
+;;(modify-coding-system-alist 'process ".*sh\\.exe" 'utf-8)
+;;(modify-coding-system-alist 'process "rg\\.exe" 'utf-8)
+
 
