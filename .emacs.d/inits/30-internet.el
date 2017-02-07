@@ -7,6 +7,9 @@
 ;; M-s M-w (eww-search-words) は検索エンジンによる検索結果をEWWで表示します。
 (setq eww-search-prefix "https://www.google.co.jp/search?btnI&q=")
 
+;; (add-hook 'eww-mode-hook
+;;           '(lambda()
+;;              (view-mode 1)))
 
 ;;----------------------------------------------
 ;; helm-google.el :

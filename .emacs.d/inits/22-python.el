@@ -21,7 +21,7 @@
 ;;(package-install 'flymake-python-pyflakes)
 (require 'flymake-python-pyflakes)
 (add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
-(setq flymake-python-pyflakes-executable "pep8")
+;;(setq flymake-python-pyflakes-executable "pep8")
 
 (defun python-mode-hooks ()
       (local-set-key "\C-c\C-v" 'flymake-start-syntax-check)
@@ -43,3 +43,18 @@
 ;;   (py-autopep8-enable-on-save))
 ;; (add-hook 'python-mode-hook 'python-mode-hooks-autopep8)
 
+;;----------------------------------------------------------------------
+;; jedi
+;;----------------------------------------------------------------------
+;;(package-install 'jedi)
+(require 'epc)
+(require 'auto-complete-config)
+(require 'python)
+
+;;(jedi:install-server)
+
+;;;;; PYTHONPATH上のソースコードがauto-completeの補完対象になる ;;;;;
+(setenv "PYTHONPATH" "D:/anaconda3/lib/site-packages")
+(require 'jedi)
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)

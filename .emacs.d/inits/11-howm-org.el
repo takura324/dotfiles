@@ -245,9 +245,6 @@
   (text-mode)
   (howm-mode t))
 
-
-	
-
 ;; M-x calendar しといて M-x howm-from-calendar
 ;;         → その日付を検索
 (defun howm-from-calendar ()
@@ -272,3 +269,13 @@
 (add-hook 'howm-menu-hook
           '(lambda ()
              (local-set-key "d" 'calendar)))
+
+
+;;----------------------------------------------------------------------
+;; org
+;;----------------------------------------------------------------------
+(setq org-log-done 'time)
+
+(require 'org)
+(bind-keys :map org-mode-map
+           ("C-c a" . org-agenda))

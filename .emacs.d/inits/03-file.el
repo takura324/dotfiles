@@ -89,6 +89,9 @@
 (setq dired-recursive-copies 'always)
 (setq dired-recursive-deletes 'always)
 
+;; diredを2つのウィンドウで開いている時に、デフォルトの移動orコピー先をもう一方のdiredで開いているディレクトリにする
+(setq dired-dwim-target t)
+
 ;;----------------------------------------------------------------------
 ;;フォルダを開く時, 新しいバッファを作成しない — dired
 ;;----------------------------------------------------------------------
@@ -400,7 +403,7 @@
 ;; diff
 ;;----------------------------------------------------------------------
 ;; Ediff Control Panel 専用のフレームを作成しない。
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+;;(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;; Ediff 画面は垂直に分割する。
 (setq ediff-split-window-function 'split-window-vertically)

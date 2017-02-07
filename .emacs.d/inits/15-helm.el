@@ -30,7 +30,7 @@
 (bind-key "C-c o"   'helm-occur)
 (bind-key "M-s o"   'helm-occur)
 (bind-key "C-c i"   'helm-imenu)
-(bind-key "C-c a"   'helm-apropos)
+;;(bind-key "C-c a"   'helm-apropos)
 
 (bind-key "C-M-g"   'helm-ag)
 (bind-key "M-g M-g" 'helm-ag)
