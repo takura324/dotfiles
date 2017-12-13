@@ -355,6 +355,8 @@
  'ruby-mode
  (cons "===" " === "))
 
+(setq c-pointer-type-style 'type)
+
 ;;; 使うメジャーモードごとにフックを設定しよう
 (add-hook 'ruby-mode-hook #'electric-operator-mode)
 (add-hook 'c-mode-common-hook #'electric-operator-mode)

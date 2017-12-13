@@ -360,6 +360,9 @@
         ("v" . scroll-other-window)
         ;; misc
         ("1" . delete-other-windows)
+        ;; etag
+        ("." . xref-find-definitions)
+        ("," . xref-pop-marker-stack)
         ))
 (defun define-many-keys (keymap key-table &optional includes)
   (let (key cmd)

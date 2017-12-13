@@ -60,6 +60,7 @@
 ;;; 使う言語で有効にしよう
 (add-hook 'c-mode-common-hook  'turn-on-ctags-auto-update-mode)
 ;;(add-hook 'emacs-lisp-mode-hook  'turn-on-ctags-auto-update-mode)
+(add-hook 'python-mode-hook 'turn-on-ctags-auto-update-mode)
 
 ;;----------------------------------------------------------------------
 ;; タグジャンプ － gtags ， global (2007/11/29)
@@ -412,3 +413,19 @@
 
 ;; (bind-key "<C-return>" 'yafolding-toggle-element)
 
+
+;;----------------------------------------------------------------------
+;; auto-highlight-symbol
+;; シンボルをハイライト表示してくれる.
+;;----------------------------------------------------------------------
+;;(package-install 'auto-highlight-symbol)
+(require 'auto-highlight-symbol)
+(global-auto-highlight-symbol-mode t)
+
+;; M-<Left>    ahs-backward	前のシンボルへ移動
+;; M-<Right>   ahs-forward	次のシンボルへ移動
+;; M-S-<Left>  ahs-backward-definition	?
+;; M-S-<Right> ahs-forward-definition	?
+;; M--         ahs-back-to-start	最初のカーソル位置のシンボルへ移動
+;; C-x C-'     ahs-change-range	ハイライトする範囲を表示しているディスプレイの範囲かバッファ全体かを切り替える
+;; C-x C-a     ahs-edit-mode	ハイライトしているシンボルを一括でrenameする

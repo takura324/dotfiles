@@ -23,6 +23,17 @@
        (message dos-path)
        (w32-shell-execute "open" "explorer.exe" (concat "/e," dos-path))))))
 
+(defun cmdprompt (&optional path)
+  "コマンドプロンプトを開きます。"
+  (interactive)
+  (setq path (expand-file-name (or path (file-name-directory (buffer-file-name)))))
+  (cond
+    ((not (file-exists-p path))
+     (message "path %s isn't exist" path))
+    (t
+     (let ((dos-path (replace-regexp-in-string "/" "\\\\" path)))
+       (message dos-path)
+       (w32-shell-execute "open" "cmd.exe" (concat "/k cd " dos-path))))))
 
 ;;----------------------------------------------------------------
 ;; カレントバッファのファイルをWindows標準コマンドで開く

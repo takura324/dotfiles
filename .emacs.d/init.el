@@ -51,13 +51,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(desktop-save-mode t)
  '(ediff-merge-split-window-function (quote split-window-vertically))
- '(magit-log-arguments (quote ("--graph" "--decorate" "++header" "-n524288")))
- '(org-agenda-files (quote ("~/memo/junk/2017/02/org_2017-02-07-114836.txt")))
+ '(org-agenda-files (quote ("~/memo/junk/OrgToDo.txt")))
  '(package-selected-packages
    (quote
-    (py-autopep8 mew elscreen flymake-python-pyflakes anaconda-mode flymake-python python-mode inf-ruby ruby-block ruby-electric ctags-update google-this helm-google electric-operator smart-newline shrink-whitespace paren-completer ez-query-replace helm-flycheck diffview bind-key mwim magit dired-k which-key yafolding origami noflet esup auto-complete-clang annotate helm-gtags key-chord dired-launch iedit ace-jump-helm-line dumb-jump helm-ag projectile el-expectations save-load-path popwin ac-helm helm-c-yasnippet pcre2el auto-async-byte-compile paredit lispxmp open-junk-file helm-anything ace-isearch helm-migemo helm-swoop package-utils visual-regexp-steroids visual-regexp bm goto-chg ace-jump-mode recentf-ext helm-descbinds helm flycheck auto-complete-c-headers srefactor point-undo undo-tree wgrep auto-complete anything-replace-string anything-git-files anything-exuberant-ctags anything auto-install redo+ migemo howm color-theme color-moccur browse-kill-ring))))
+    (jedi elpy robe-ac robe auto-highlight-symbol enh-ruby-mode "enh-ruby-mode" csharp-mode py-autopep8 mew elscreen flymake-python-pyflakes anaconda-mode flymake-python python-mode inf-ruby ruby-block ruby-electric ctags-update google-this helm-google electric-operator smart-newline shrink-whitespace paren-completer ez-query-replace helm-flycheck diffview bind-key mwim magit dired-k which-key yafolding origami noflet esup auto-complete-clang annotate helm-gtags key-chord dired-launch iedit ace-jump-helm-line dumb-jump helm-ag projectile el-expectations save-load-path popwin ac-helm helm-c-yasnippet pcre2el auto-async-byte-compile paredit lispxmp open-junk-file helm-anything ace-isearch helm-migemo helm-swoop package-utils visual-regexp-steroids visual-regexp bm goto-chg ace-jump-mode recentf-ext helm-descbinds helm flycheck auto-complete-c-headers srefactor point-undo undo-tree wgrep auto-complete anything-replace-string anything-git-files anything-exuberant-ctags anything auto-install redo+ migemo howm color-theme color-moccur browse-kill-ring))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

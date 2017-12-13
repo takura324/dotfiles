@@ -197,3 +197,5 @@
         ("-telnet" . "telnet")
         ("dict" . "OnlineDict")
         ("*WL:Message*" . "Wanderlust")))
+
+(bind-key "<C-tab>" 'elscreen-next)

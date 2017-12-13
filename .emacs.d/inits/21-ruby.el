@@ -1,4 +1,9 @@
 ;;----------------------------------------------------------------------
+;; enh-ruby-mode
+;;----------------------------------------------------------------------
+;;(package-install 'enh-ruby-mode)
+
+;;----------------------------------------------------------------------
 ;; ruby-modeのインデント設定
 ;;----------------------------------------------------------------------
 (setq 
@@ -23,17 +28,30 @@
 ;;----------------------------------------------------------------------
 ;; インタラクティブRubyを利用する──inf-ruby
 ;;----------------------------------------------------------------------
-;;(package-install 'inf-ruby)
-(autoload 'run-ruby "inf-ruby"
-  "Run an inferior Ruby process")
-(autoload 'inf-ruby-keys "inf-ruby"
-  "Set local key defs for inf-ruby in ruby-mode")
+;; ;;(package-install 'inf-ruby)
+;; (autoload 'run-ruby "inf-ruby"
+;;   "Run an inferior Ruby process")
+;; (autoload 'inf-ruby-keys "inf-ruby"
+;;   "Set local key defs for inf-ruby in ruby-mode")
 
-;; ruby-mode-hook用の関数を定義
-(defun ruby-mode-hooks ()
-  (inf-ruby-keys)
-  (ruby-electric-mode t)
-  (ruby-block-mode t))
-;; ruby-mode-hookに追加
-(add-hook 'ruby-mode-hook 'ruby-mode-hooks)
+;; ;; ruby-mode-hook用の関数を定義
+;; (defun ruby-mode-hooks ()
+;;   (inf-ruby-keys)
+;;   (ruby-electric-mode t)
+;;   (ruby-block-mode t))
+;; ;; ruby-mode-hookに追加
+;; (add-hook 'ruby-mode-hook 'ruby-mode-hooks)
 
+(autoload 'inf-ruby "inf-ruby" "Run an inferior Ruby process" t)
+(add-hook 'ruby-mode-hook 'inf-ruby-minor-mode)
+
+
+;; rcodetools ( xmpfilter )
+(require 'rcodetools)
+(setq rct-find-tag-if-available nil)
+(defun ruby-mode-hook-rcodetools ()
+  (define-key ruby-mode-map "\M-\C-i" 'rct-complete-symbol)
+  (define-key ruby-mode-map "\C-c\C-t" 'ruby-toggle-buffer)
+  (define-key ruby-mode-map "\C-c\C-f" 'rct-ri)
+  (define-key ruby-mode-map (kbd "C-c C-d") 'xmp))
+(add-hook 'ruby-mode-hook 'ruby-mode-hook-rcodetools)
