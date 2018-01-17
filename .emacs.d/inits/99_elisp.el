@@ -32,7 +32,7 @@
 ;;;-----------------------------------------------------------------------------
 (require 'auto-async-byte-compile)
 ;; 自動バイトコンパイルを無効にするファイル名の正規表現
-(setq auto-async-byte-compile-exclude-files-regexp "\\(/junk/\\|/inits/\\)")
+(setq auto-async-byte-compile-exclude-files-regexp "\\(/junk/\\|/inits/\\|/Dropbox/\\)")
 (add-hook 'emacs-lisp-mode-hook 'enable-auto-async-byte-compile-mode)
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
@@ -56,3 +56,17 @@
 ;; init.el レスポンス測定
 ;;(package-install 'esup)
 ;;(package-install 'noflet)
+
+
+;; キーボードマクロの保存
+(defvar kmacro-save-file "~/.emacs.d/inits/99_elisp.el"
+  "キーボードマクロを保存するファイル。")
+
+(defun kmacro-save (symbol)
+  (interactive "SName for last kbd macro: ")
+  (name-last-kbd-macro symbol)
+  (with-current-buffer (find-file-noselect kmacro-save-file)
+    (goto-char (point-max))
+    (insert-kbd-macro symbol)
+    (basic-save-buffer)))
+

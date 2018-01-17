@@ -65,3 +65,6 @@
 (setq jedi:complete-on-dot t)
 
 
+;;; Misc
+(setq py-keep-windows-configuration t)
+(bind-key "S-<f8>" 'py-autopep8 python-mode-map)
